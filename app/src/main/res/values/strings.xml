@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Aquarium Hub</string>
+
+    <string name="menu_getting_start">開始使用</string>
+    <string name="menu_tutorial">使用說明</string>
+    <string name="menu_connection_setting">連線設定</string>
+    <string name="menu_devices_setting">裝置設定</string>
+    <string name="menu_backup">數據備份</string>
+
+    <string name="title_hub">水族箱</string>
+    <string name="title_status">狀態</string>
+    <string name="title_notifications">通知</string>
+    <string name="title_setting">設定</string>
+    <string name="title_history">歷史紀錄</string>
+</resources>
