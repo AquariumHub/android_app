@@ -35,7 +35,7 @@ import com.amazonaws.services.iot.model.CreateKeysAndCertificateResult;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.UUID;
-
+//test
 public class MainActivity extends AppCompatActivity {
 
     static final String LOG_TAG = MainActivity.class.getCanonicalName();
