@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
     Button btnSubscribe;
     Button btnPublish;
     Button btnDisconnect;
+
+    SeekBar barIntensity;
+    SeekBar barColor;
 
     AWSIotClient mIotAndroidClient;
     AWSIotMqttManager mqttManager;
@@ -158,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
         Region region = Region.getRegion(MY_REGION);
 
-        // MQTT Client
         mqttManager = new AWSIotMqttManager(clientId, CUSTOMER_SPECIFIC_ENDPOINT);
 
         // Set keepalive to 10 seconds.  Will recognize disconnects more quickly but will also send
@@ -377,7 +380,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_top_right, menu);
         return true;
