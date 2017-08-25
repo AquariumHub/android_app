@@ -68,13 +68,16 @@ public class MainActivity extends AppCompatActivity {
     TextView tvClientId;
     TextView tvStatus;
 
+    TextView tvAp700Intensity;
+    TextView tvAp700Color;
+
     Button btnConnect;
     Button btnSubscribe;
     Button btnPublish;
     Button btnDisconnect;
 
-    SeekBar barIntensity;
-    SeekBar barColor;
+    SeekBar seekbarAP700Intensity;
+    SeekBar seekbarAP700Color;
 
     AWSIotClient mIotAndroidClient;
     AWSIotMqttManager mqttManager;
@@ -133,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         tvLastMessage = (TextView) findViewById(R.id.tvLastMessage);
         tvClientId = (TextView) findViewById(R.id.tvClientId);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
+        tvAp700Intensity = (TextView) findViewById(R.id.title_ap700);
+        tvAp700Color = (TextView) findViewById(R.id.title_ap700_color);
 
         btnConnect = (Button) findViewById(R.id.btnConnect);
         btnConnect.setOnClickListener(connectClick);
@@ -146,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnDisconnect = (Button) findViewById(R.id.btnDisconnect);
         btnDisconnect.setOnClickListener(disconnectClick);
+
+        seekbarAP700Intensity = (SeekBar) findViewById(R.id.bar_ap700_intensity);
+        seekbarAP700Intensity.setOnSeekBarChangeListener(seekbarAP700IntensityChange);
 
         // MQTT client IDs are required to be unique per AWS IoT account.
         // This UUID is "practically unique" but does not _guarantee_
@@ -376,6 +384,29 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Disconnect error.", e);
             }
+
+        }
+    };
+
+    SeekBar.OnSeekBarChangeListener seekbarAP700IntensityChange = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            String TOPIC_SHADOW_UPDATE = "$aws/things/AquariumHub/shadow/update";
+            try {
+                tvAp700Intensity.setText("AP700: " + "亮度:" + String.valueOf(progress));
+                mqttManager.publishString("{\"state\":{\"desired\":{\"AP700\":{\"intensity\":" + String.valueOf(progress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
+            } catch (Exception e){
+                Log.e(LOG_TAG, "something error with seekbar of ap700 intensity.", e);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
 
         }
     };
