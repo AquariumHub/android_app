@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tvAp700Intensity;
     TextView tvAp700Color;
+    TextView tvA360Intensity;
+    TextView tvA360Color;
 
     Button btnConnect;
     Button btnSubscribe;
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     SeekBar seekbarAP700Intensity;
     SeekBar seekbarAP700Color;
+    SeekBar seekbarA360Intensity;
+    SeekBar seekbarA360Color;
 
     AWSIotClient mIotAndroidClient;
     AWSIotMqttManager mqttManager;
@@ -137,7 +141,9 @@ public class MainActivity extends AppCompatActivity {
         tvClientId = (TextView) findViewById(R.id.tvClientId);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
         tvAp700Intensity = (TextView) findViewById(R.id.title_ap700);
-        tvAp700Color = (TextView) findViewById(R.id.title_ap700_color);
+        tvAp700Color = (TextView) findViewById(R.id.title_ap700);
+        tvA360Intensity = (TextView) findViewById(R.id.title_a360);
+        tvA360Color = (TextView) findViewById(R.id.title_a360);
 
         btnConnect = (Button) findViewById(R.id.btnConnect);
         btnConnect.setOnClickListener(connectClick);
@@ -154,6 +160,13 @@ public class MainActivity extends AppCompatActivity {
 
         seekbarAP700Intensity = (SeekBar) findViewById(R.id.bar_ap700_intensity);
         seekbarAP700Intensity.setOnSeekBarChangeListener(seekbarAP700IntensityChange);
+        seekbarAP700Color = (SeekBar) findViewById(R.id.bar_ap700_color);
+        seekbarAP700Color.setOnSeekBarChangeListener(seekbarAP700ColorChange);
+
+        seekbarA360Intensity = (SeekBar) findViewById(R.id.bar_a360_intensity);
+        seekbarA360Intensity.setOnSeekBarChangeListener(seekbarA360IntensityChange);
+        seekbarA360Color = (SeekBar) findViewById(R.id.bar_a360_color);
+        seekbarA360Color.setOnSeekBarChangeListener(seekbarA360ColorChange);
 
         // MQTT client IDs are required to be unique per AWS IoT account.
         // This UUID is "practically unique" but does not _guarantee_
@@ -389,15 +402,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     SeekBar.OnSeekBarChangeListener seekbarAP700IntensityChange = new SeekBar.OnSeekBarChangeListener() {
+        int valueOfProgress;
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            String TOPIC_SHADOW_UPDATE = "$aws/things/AquariumHub/shadow/update";
-            try {
-                tvAp700Intensity.setText("AP700: " + "亮度:" + String.valueOf(progress));
-                mqttManager.publishString("{\"state\":{\"desired\":{\"AP700\":{\"intensity\":" + String.valueOf(progress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
-            } catch (Exception e){
-                Log.e(LOG_TAG, "something error with seekbar of ap700 intensity.", e);
-            }
+            valueOfProgress = progress;
         }
 
         @Override
@@ -407,9 +415,90 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
+            final String TOPIC_SHADOW_UPDATE = "$aws/things/AquariumHub/shadow/update";
+            try {
+                tvAp700Intensity.setText("AP700: " + "亮度:" + String.valueOf(valueOfProgress*255/100));
+                mqttManager.publishString("{\"state\":{\"desired\":{\"AP700\":{\"intensity\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
+            } catch (Exception e){
+                Log.e(LOG_TAG, "something wrong with seekbar of ap700 intensity.", e);
+            }
         }
     };
+
+
+    SeekBar.OnSeekBarChangeListener seekbarAP700ColorChange = new SeekBar.OnSeekBarChangeListener() {
+        int valueOfProgress;
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            valueOfProgress = progress;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            final String TOPIC_SHADOW_UPDATE = "$aws/things/AquariumHub/shadow/update";
+            try {
+                tvAp700Color.setText("AP700: " + "顏色:" + String.valueOf(valueOfProgress*255/100));
+                mqttManager.publishString("{\"state\":{\"desired\":{\"AP700\":{\"color\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
+            } catch (Exception e){
+                Log.e(LOG_TAG, "something wrong with seekbar of ap700 color.", e);
+            }
+        }
+    };
+
+    SeekBar.OnSeekBarChangeListener seekbarA360IntensityChange = new SeekBar.OnSeekBarChangeListener() {
+        int valueOfProgress;
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            valueOfProgress = progress;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            final String TOPIC_SHADOW_UPDATE = "$aws/things/AquariumHub/shadow/update";
+            try {
+                tvA360Intensity.setText("A360: " + "亮度:" + String.valueOf(valueOfProgress));
+                mqttManager.publishString("{\"state\":{\"desired\":{\"A360\":{\"intensity\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
+            } catch (Exception e){
+                Log.e(LOG_TAG, "something wrong with seekbar of a360 intensity.", e);
+            }
+        }
+    };
+
+
+    SeekBar.OnSeekBarChangeListener seekbarA360ColorChange = new SeekBar.OnSeekBarChangeListener() {
+        int valueOfProgress;
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            valueOfProgress = progress;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            final String TOPIC_SHADOW_UPDATE = "$aws/things/AquariumHub/shadow/update";
+            try {
+                tvA360Color.setText("A360: " + "顏色:" + String.valueOf(valueOfProgress));
+                mqttManager.publishString("{\"state\":{\"desired\":{\"A360\":{\"color\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
+            } catch (Exception e){
+                Log.e(LOG_TAG, "something wrong with seekbar of a360 color.", e);
+            }
+        }
+    };
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_top_right, menu);
