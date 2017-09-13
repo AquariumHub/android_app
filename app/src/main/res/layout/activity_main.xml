@@ -1,212 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="net.aquariumhub.myapplication.MainActivity">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="match_parent"
+    <fragment
+        android:id="@+id/id_fragment_title"
+        android:name="net.aquariumhub.myapplication.FragmentTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_hub" />
+        android:layout_above="@id/id_ly_bottombar"
+        android:layout_below="@id/id_fragment_title"
+        android:layout_margin="10dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <include
+        android:id="@+id/id_ly_bottombar"
+        layout="@layout/bottom_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bar_intensity" />
-
-        <SeekBar
-            android:id="@+id/barIntensity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bar_color" />
-
-        <SeekBar
-            android:id="@+id/barColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="Client Id:" />
-
-        <TextView
-            android:id="@+id/tvClientId"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="Status:" />
-
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical"
-            android:text="Disconnected" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btnConnect"
-            android:layout_gravity="left"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:text="Connect" />
-
-        <Button
-            android:id="@+id/btnDisconnect"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:layout_gravity="right"
-            android:text="Disconnect" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/txtSubcribe"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:hint="Topic name"
-            android:gravity="center_vertical" />
-
-        <Button
-            android:id="@+id/btnSubscribe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Subscribe" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical|top"
-            android:text="Last message:" />
-
-        <TextView
-            android:id="@+id/tvLastMessage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical|top"
-            android:text="N/A" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="Topic:" />
-
-        <EditText
-            android:id="@+id/txtTopic"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="Message:" />
-
-        <EditText
-            android:id="@+id/txtMessage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnPublish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="Publish" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
-
-</LinearLayout>
+</RelativeLayout>

@@ -12,7 +12,36 @@
     <string name="title_notifications">通知</string>
     <string name="title_setting">設定</string>
     <string name="title_history">歷史紀錄</string>
+    <string name="tool_bar">工具列</string>
+    <string name="title_ap700">AP700:</string>
+    <string name="title_a360">A360:</string>
 
     <string name="bar_intensity">亮度:</string>
     <string name="bar_color">顏色:</string>
+
+    <string name="coming_soon">Coming soon&#8230;</string>
+
+    <string name="ap700_intensity">AP700: 亮度: %d</string>
+    <string name="ap700_color">AP700: 顏色: %d</string>
+    <string name="a360_intensity">A360: 亮度: %d</string>
+    <string name="a360_color">A360: 顏色: %d</string>
+
+    <string name="client_id">Client ID:</string>
+    <string name="status">Status:</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
+    <string name="connecting">Connecting</string>
+    <string name="reconnecting">Reconnecting</string>
+    <string name="topic_name">Topic Name</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="publish">Publish</string>
+    <string name="NA">N/A</string>
+    <string name="topic">Topic:</string>
+    <string name="message">Message:</string>
+    <string name="last_message">Last Message:</string>
+    <string name="error_message">Error! %s</string>
+
+
 </resources>
