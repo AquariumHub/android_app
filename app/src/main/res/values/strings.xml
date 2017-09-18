@@ -43,5 +43,9 @@
     <string name="last_message">Last Message:</string>
     <string name="error_message">Error! %s</string>
 
+    <string name="hub_temperature">溫度: %s</string>
+    <string name="hub_brightness">亮度: %s</string>
+    <string name="hub_lightFrequency">光頻: %s</string>
+
 
 </resources>

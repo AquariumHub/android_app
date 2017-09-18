@@ -36,15 +36,15 @@ public class AwsService extends Service {
 
     // IoT endpoint
     // AWS Iot CLI describe-endpoint call returns: XXXXXXXXXX.iot.<region>.amazonaws.com
-    private static final String CUSTOMER_SPECIFIC_ENDPOINT = "a2bdrinkbnov3t.iot.ap-northeast-1.amazonaws.com";
+    private static final String CUSTOMER_SPECIFIC_ENDPOINT = "a2bdrinkbnov3t.iot.us-west-2.amazonaws.com";
     // Cognito pool ID. For this app, pool needs to be unauthenticated pool with
     // AWS IoT permissions.
-    private static final String COGNITO_POOL_ID = "ap-northeast-1:c3b79e39-a8cf-44df-872a-d11c73653855";
+    private static final String COGNITO_POOL_ID = "us-west-2:febf4176-a30e-4c48-998e-78c90dc764de";
     // Name of the AWS IoT policy to attach to a newly created certificate
     private static final String AWS_IOT_POLICY_NAME = "AttachPrincipalPolicy";
 
     // Region of AWS IoT
-    private static final Regions MY_REGION = Regions.AP_NORTHEAST_1;
+    private static final Regions MY_REGION = Regions.US_WEST_2;
     // Filename of KeyStore file on the filesystem
     private static final String KEYSTORE_NAME = "iot_keystore";
     // Password for the private key in the KeyStore

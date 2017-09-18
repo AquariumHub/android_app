@@ -11,9 +11,22 @@
         android:text="@string/title_status" />
 
     <TextView
+        android:id="@+id/tv_hub_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/coming_soon" />
+        android:text="@string/hub_temperature"/>
+
+    <TextView
+        android:id="@+id/tv_hub_brightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hub_brightness"/>
+
+    <TextView
+        android:id="@+id/tv_hub_lightFrequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hub_lightFrequency"/>
+
 
 </LinearLayout>
