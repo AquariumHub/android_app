@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttClientStatusCallback;
@@ -73,6 +74,11 @@ public class FragmentTabStatus extends Fragment {
     tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), "0"));
     tvHubLightFrequency.setText(String.format(getString(R.string.hub_lightFrequency), "0"));
 
+    String URL_GAUGE_GRAPH = "http://192.168.1.103/test/gauge.html";
+
+    WebView mWebVIew = (WebView) getActivity().findViewById(R.id.wv_gauge_graph);
+    mWebVIew.getSettings().setJavaScriptEnabled(true);
+    mWebVIew.loadUrl(URL_GAUGE_GRAPH);
 
   }
 

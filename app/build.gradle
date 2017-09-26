@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -33,5 +34,6 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-machinelearning:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.+'
+    compile project(':vitamio')
     testCompile 'junit:junit:4.12'
 }

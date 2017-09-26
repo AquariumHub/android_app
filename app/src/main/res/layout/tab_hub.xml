@@ -14,11 +14,12 @@
         android:layout_height="wrap_content"
         android:text="@string/title_hub" />
 
-    <VideoView
-        android:id="@+id/hub_videoView"
-        android:layout_width="320dp"
+    <net.aquariumhub.myapplication.MjpegView
+        android:id="@+id/mjpeg_view"
+        android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:layout_gravity="center" />
+        android:layout_below="@+id/titlelayout"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/title_ap700"

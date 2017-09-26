@@ -28,5 +28,12 @@
         android:layout_height="wrap_content"
         android:text="@string/hub_lightFrequency"/>
 
+    <WebView
+        android:id="@+id/wv_gauge_graph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+    </WebView>
+
 
 </LinearLayout>
