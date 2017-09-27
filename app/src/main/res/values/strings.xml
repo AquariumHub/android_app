@@ -8,6 +8,7 @@
     <string name="menu_backup">數據備份</string>
 
     <string name="title_hub">水族箱</string>
+    <string name="title_live_stream">即時影像</string>
     <string name="title_status">狀態</string>
     <string name="title_notifications">通知</string>
     <string name="title_setting">設定</string>

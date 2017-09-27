@@ -207,7 +207,7 @@ public class AwsService extends Service {
 
     class MyBinder extends Binder {
 
-        public AwsService getAwsServiceInstance() {
+        AwsService getAwsServiceInstance() {
             return AwsService.this;
         }
     }

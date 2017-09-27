@@ -11,8 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -48,11 +51,14 @@ public class FragmentTabHub extends Fragment {
 
   final String URL_VIDEO = "http://13.115.112.36:4443/?action=stream";
   MjpegView mMjpegView;
+  boolean flag_liveStream = false;
 
   SeekBar seekbarAP700Intensity;
   SeekBar seekbarAP700Color;
   SeekBar seekbarA360Intensity;
   SeekBar seekbarA360Color;
+
+  Switch aSwitchLiveStream;
 
   ServiceConnection serviceConnection = new ServiceConnection() {
     @Override
@@ -94,8 +100,12 @@ public class FragmentTabHub extends Fragment {
     tvA360Intensity = (TextView) getActivity().findViewById(R.id.title_a360);
     tvA360Color = (TextView) getActivity().findViewById(R.id.title_a360);
 
+    aSwitchLiveStream = (Switch) getActivity().findViewById(R.id.switch_liveStream);
+    aSwitchLiveStream.setOnCheckedChangeListener(switchLiveStreamOnClick);
+
     mMjpegView = (MjpegView) getActivity().findViewById(R.id.mjpeg_view);
-    mMjpegView.startPlayback();
+    mMjpegView.stopPlayback();
+    aSwitchLiveStream.setChecked(false);
     new DoRead().execute(URL_VIDEO);
   }
 
@@ -104,6 +114,12 @@ public class FragmentTabHub extends Fragment {
     super.onStart();
     Intent myIntent = new Intent(getActivity(), AwsService.class);
     getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
+
+    if(flag_liveStream){
+      mMjpegView.startPlayback();
+    }else{
+      mMjpegView.stopPlayback();
+    }
   }
 
   @Override
@@ -149,6 +165,17 @@ public class FragmentTabHub extends Fragment {
       mMjpegView.showFps(true);
     }
   }
+
+  Switch.OnCheckedChangeListener switchLiveStreamOnClick = new Switch.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+      if(isChecked){
+        mMjpegView.startPlayback();
+      }else{
+        mMjpegView.stopPlayback();
+      }
+    }
+  };
 
   SeekBar.OnSeekBarChangeListener seekbarAP700IntensityChange = new SeekBar.OnSeekBarChangeListener() {
     int valueOfProgress;
