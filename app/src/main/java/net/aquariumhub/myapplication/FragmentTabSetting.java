@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import static android.content.Context.BIND_AUTO_CREATE;
+import com.facebook.FacebookSdk;
 
 /**
  * Created by michael on 2017/9/9.
@@ -34,7 +35,6 @@ public class FragmentTabSetting extends Fragment {
      */
     private static final String LOG_TAG = "FragmentTabSetting";
 
-    private AwsService.MyBinder myBinder;
     private AwsService myService;
     boolean mBounded;
 
@@ -57,7 +57,7 @@ public class FragmentTabSetting extends Fragment {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             //Toast.makeText(getActivity(), "Service is connected", Toast.LENGTH_LONG).show();
-            myBinder = (AwsService.MyBinder) service;
+            AwsService.MyBinder myBinder = (AwsService.MyBinder) service;
             myService = myBinder.getAwsServiceInstance();
             mBounded = true;
         }

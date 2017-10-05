@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Aquarium Hub</string>
 
+    <string name="menu_login">登入</string>
     <string name="menu_getting_start">開始使用</string>
     <string name="menu_tutorial">使用說明</string>
     <string name="menu_connection_setting">連線設定</string>
@@ -48,5 +49,12 @@
     <string name="hub_brightness">亮度: %s</string>
     <string name="hub_lightFrequency">光頻: %s</string>
 
+    <string name="facebook_app_id">1188126607998146</string>
+    <string name="fb_login_protocol_scheme">fb1188126607998146</string>
+    <string name="title_activity_drawer">Drawer</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

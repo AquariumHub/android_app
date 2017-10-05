@@ -9,4 +9,6 @@
     <color name="lightGray">#88888888</color>
     <color name="normal">#6E6E6E</color>
 
+    <color name="welcome_title">#1c54bc</color>
+
 </resources>

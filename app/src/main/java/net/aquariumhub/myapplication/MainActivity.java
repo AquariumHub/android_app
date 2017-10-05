@@ -1,5 +1,6 @@
 package net.aquariumhub.myapplication;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,7 +25,6 @@ public class MainActivity extends FragmentActivity {
     private static final String LOG_TAG = "LogDemo";
 
     private ViewPager mViewPager;
-    private FragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments = new ArrayList<>(); // list of fragments
 
     /**
@@ -38,13 +38,13 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
         initView(); // setup the default resources of view objects
 
-        mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+        FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
                 return mFragments.size();
@@ -188,5 +188,4 @@ public class MainActivity extends FragmentActivity {
     public void btnHistoryPressed(View view) {
         mViewPager.setCurrentItem(3, true);
     }
-
 }

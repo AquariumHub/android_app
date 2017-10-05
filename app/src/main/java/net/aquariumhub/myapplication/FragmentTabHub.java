@@ -15,7 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -40,7 +39,6 @@ public class FragmentTabHub extends Fragment {
    */
   final static String LOG_TAG = "FragmentTabHub";
 
-  private AwsService.MyBinder myBinder;
   private AwsService myService;
   boolean mBounded;
 
@@ -48,10 +46,10 @@ public class FragmentTabHub extends Fragment {
   TextView tvAp700Color;
   TextView tvA360Intensity;
   TextView tvA360Color;
-
-  final String URL_VIDEO = "http://13.115.112.36:4443/?action=stream";
+/*http://aquarium-hub.tunnel.qydev.com/?action=stream http://13.115.112.36:4443/?action=stream*/
+  final String URL_VIDEO = "http://aquarium-hub.tunnel.qydev.com/?action=stream";
   MjpegView mMjpegView;
-  boolean flag_liveStream = false;
+  boolean flag_liveStream = true;
 
   SeekBar seekbarAP700Intensity;
   SeekBar seekbarAP700Color;
@@ -64,7 +62,7 @@ public class FragmentTabHub extends Fragment {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
       //Toast.makeText(getActivity(), "Service is connected", Toast.LENGTH_LONG).show();
-      myBinder = (AwsService.MyBinder) service;
+      AwsService.MyBinder myBinder = (AwsService.MyBinder) service;
       myService = myBinder.getAwsServiceInstance();
       mBounded = true;
     }
@@ -104,8 +102,8 @@ public class FragmentTabHub extends Fragment {
     aSwitchLiveStream.setOnCheckedChangeListener(switchLiveStreamOnClick);
 
     mMjpegView = (MjpegView) getActivity().findViewById(R.id.mjpeg_view);
-    mMjpegView.stopPlayback();
-    aSwitchLiveStream.setChecked(false);
+    mMjpegView.startPlayback();
+    aSwitchLiveStream.setChecked(true);
     new DoRead().execute(URL_VIDEO);
   }
 
