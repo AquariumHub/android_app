@@ -57,7 +57,7 @@ public class MainActivity extends FragmentActivity {
     };
 
     mViewPager.setAdapter(mAdapter);
-
+    mViewPager.setOffscreenPageLimit(2);
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
