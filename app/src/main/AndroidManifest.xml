@@ -26,9 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".WelcomeGuideActivity" />
-        <activity android:name=".SocialLogin"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".WelcomeGuideActivity"/>
+        <activity android:name=".SocialLogin"/>
     </application>
 
 </manifest>
