@@ -5,18 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.telecom.Call;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-public class WelcomeGuideActivity extends Activity {
+import io.vov.vitamio.utils.Log;
+
+public class WelcomeGuideActivity extends AppCompatActivity {
+
+  final String LOG_TAG = "WelcomeGuideActivity";
 
   LoginButton loginButton;
   CallbackManager callbackManager;
@@ -36,17 +42,22 @@ public class WelcomeGuideActivity extends Activity {
     loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
       @Override
       public void onSuccess(LoginResult loginResult) {
-        enterMainActivity();
+        try{
+          enterMainActivity();
+        } catch (Exception e){
+          Log.e(LOG_TAG, "enterMainActivity(): ", e);
+        }
       }
 
       @Override
       public void onCancel() {
-
+        enterMainActivity();
       }
 
       @Override
       public void onError(FacebookException error) {
-
+        Log.e(LOG_TAG, "FacebookException: ", error );
+        enterMainActivity();
       }
     });
   }
@@ -62,7 +73,7 @@ public class WelcomeGuideActivity extends Activity {
   }
 
   public void enterMainActivity() {
-    Intent intent = new Intent(WelcomeGuideActivity.this, Splash.class);
+    Intent intent = new Intent(WelcomeGuideActivity.this, MainActivity.class);
     startActivity(intent);
 
     SharedPreferences activityPreferences = getApplicationContext().getSharedPreferences("app", Context.MODE_PRIVATE);

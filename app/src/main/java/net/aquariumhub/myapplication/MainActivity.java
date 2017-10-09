@@ -1,15 +1,14 @@
 package net.aquariumhub.myapplication;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Tag for looking for error messages in the android device monitor
@@ -34,6 +33,8 @@ public class MainActivity extends FragmentActivity {
     private LinearLayout lLayoutTabBottomStatus;
     private LinearLayout lLayoutTabBottomSetting;
     private LinearLayout lLayoutTabBottomHistory;
+
+    MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,6 @@ public class MainActivity extends FragmentActivity {
         };
 
         mViewPager.setAdapter(mAdapter);
-
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -120,6 +120,9 @@ public class MainActivity extends FragmentActivity {
         lLayoutTabBottomStatus = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_status);
         lLayoutTabBottomSetting = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_setting);
         lLayoutTabBottomHistory = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_history);
+
+        menuItem = (MenuItem) findViewById(R.id.action_login);
+
 
         ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_bottom_hub))
                 .setImageResource(R.drawable.ic_hub_pressed);
