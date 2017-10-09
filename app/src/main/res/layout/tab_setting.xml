@@ -42,10 +42,11 @@
             android:layout_height="match_parent"
             android:layout_weight="5"
             android:gravity="center_vertical"
-            android:text="@string/status" />
+            android:text="@string/disconnected" />
     </LinearLayout>
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
