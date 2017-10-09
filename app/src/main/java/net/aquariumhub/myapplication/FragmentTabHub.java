@@ -28,10 +28,6 @@ import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
-/**
- * Created by michael on 2017/9/9.
- */
-
 public class FragmentTabHub extends Fragment {
 
   /**
@@ -47,7 +43,7 @@ public class FragmentTabHub extends Fragment {
   TextView tvA360Intensity;
   TextView tvA360Color;
 /*http://aquarium-hub.tunnel.qydev.com/?action=stream http://13.115.112.36:4443/?action=stream*/
-  final String URL_VIDEO = "http://aquarium-hub.tunnel.qydev.com/?action=stream";
+  final String URL_VIDEO = "http://aquariumhub.ngrok.cc/?action=stream";
   MjpegView mMjpegView;
   boolean flag_liveStream = true;
 
@@ -133,7 +129,7 @@ public class FragmentTabHub extends Fragment {
   public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
     protected MjpegInputStream doInBackground(String... url) {
       //TODO: if camera has authentication deal with it and don't just not work
-      HttpResponse res = null;
+      HttpResponse res;
       DefaultHttpClient httpclient = new DefaultHttpClient();
       Log.d(LOG_TAG, "1. Sending http request");
       try {

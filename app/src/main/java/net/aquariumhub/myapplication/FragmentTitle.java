@@ -11,17 +11,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-/**
- * Created by michael on 2017/9/7.
- */
-
 public class FragmentTitle extends Fragment {
-    private ImageButton mTitleMenu;
+  private ImageButton mTitleMenu;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        return inflater.inflate(R.layout.fragment_title, container, false);
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState)
+  {
+    return inflater.inflate(R.layout.fragment_title, container, false);
+  }
 }
