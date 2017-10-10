@@ -31,7 +31,7 @@ public class Splash extends Activity {
       public void run() {
         enterHomeActivity();
       }
-    }, 2000);
+    }, 1500);
   }
 
   private void enterHomeActivity() {

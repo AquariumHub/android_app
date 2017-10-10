@@ -1,6 +1,9 @@
 package net.aquariumhub.myapplication;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,13 +14,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.CallbackManager;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +39,7 @@ public class MainActivity extends AppCompatActivity
   /**
    * Tag for looking for error messages in the android device monitor
    */
-  private static final String LOG_TAG = "LogDemo";
+  private static final String TAG = "LogDemo";
 
   private ViewPager mViewPager;
   private List<Fragment> mFragments = new ArrayList<>(); // list of fragments
@@ -39,6 +51,13 @@ public class MainActivity extends AppCompatActivity
   private LinearLayout lLayoutTabBottomStatus;
   private LinearLayout lLayoutTabBottomSetting;
   private LinearLayout lLayoutTabBottomHistory;
+
+  /**
+   * Facebook instances
+   */
+  private LoginManager loginManager;
+  private CallbackManager callbackManager;
+  private ProfileTracker profileTracker;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +78,37 @@ public class MainActivity extends AppCompatActivity
     navigationView.setNavigationItemSelectedListener(this);
 
     initView(); // setup the default resources of view objects
+
+    ImageView userPhoto = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.user_photo);
+    TextView userName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name);
+    TextView userstatus = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_status);
+
+    /**
+     * Get user profile
+     */
+    if (Profile.getCurrentProfile() != null) {
+      Profile profile = Profile.getCurrentProfile();
+      // get the user profile picture
+      Uri uri_userPhoto = profile.getProfilePictureUri(300, 300);
+      String id = profile.getId();
+      String name = profile.getName();
+      Log.d(TAG, "Facebook userPhoto: " + uri_userPhoto);
+      Log.d(TAG, "Facebook id: " + id);
+      Log.d(TAG, "Facebook name: " + name);
+      try {
+        Glide.with(this).load(uri_userPhoto)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(userPhoto);
+        userName.setText(name);
+        userstatus.setText(String.format(getString(R.string.user_status), "Facebook"));
+      } catch (Exception e) {
+        Log.e(TAG, "user profile: ", e);
+      }
+    } else {
+      userPhoto.setImageResource(R.mipmap.ic_launcher_round);
+      userName.setText(R.string.app_name);
+      userstatus.setText(String.format(getString(R.string.user_status), "Facebook"));
+    }
 
     FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override
@@ -126,7 +176,6 @@ public class MainActivity extends AppCompatActivity
 
       }
     });
-
   }
 
   private void initView() {
@@ -239,7 +288,7 @@ public class MainActivity extends AppCompatActivity
 
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
-  public boolean onNavigationItemSelected(MenuItem item) {
+  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     // Handle navigation view item clicks here.
     int id = item.getItemId();
 
@@ -260,5 +309,18 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
+  }
+
+  public void enterSocialLoginActivity(View v) {
+    Intent intent = new Intent(this, SocialLogin.class);
+    startActivity(intent);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    // if you don't add following block,
+    // your registered `FacebookCallback` won't be called
+    callbackManager.onActivityResult(requestCode, resultCode, data);
   }
 }

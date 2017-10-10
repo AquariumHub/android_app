@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="net.aquariumhub.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,9 +29,16 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".WelcomeGuideActivity"/>
-        <activity android:name=".SocialLogin"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".WelcomeGuideActivity" />
+        <activity
+            android:name=".SocialLogin"
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

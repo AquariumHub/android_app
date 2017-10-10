@@ -36,4 +36,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-machinelearning:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.+'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

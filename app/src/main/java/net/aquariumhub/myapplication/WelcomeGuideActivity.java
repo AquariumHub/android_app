@@ -14,12 +14,17 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WelcomeGuideActivity extends Activity {
 
   final String LOG_TAG = "WelcomeGuideActivity";
 
   LoginButton loginButton;
   CallbackManager callbackManager;
+
+  List<String> permissions = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -84,4 +89,5 @@ public class WelcomeGuideActivity extends Activity {
       enterMainActivity();
     }
   };
+
 }
