@@ -1,5 +1,6 @@
 package net.aquariumhub.myapplication;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -63,6 +64,7 @@ public class FragmentTabStatus extends Fragment {
     return inflater.inflate(R.layout.tab_status, container, false);
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
 
