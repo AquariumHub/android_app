@@ -1,13 +1,17 @@
 package net.aquariumhub.myapplication;
 
+import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.iot.AWSIotKeystoreHelper;
+import com.amazonaws.mobileconnectors.iot.AWSIotMqttClientStatusCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttLastWillAndTestament;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttManager;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
@@ -205,6 +209,57 @@ public class AwsService extends Service {
 
     AwsService getAwsServiceInstance() {
       return AwsService.this;
+    }
+  }
+
+  private Activity activity = null;
+  TextView tvStatus = null;
+
+  public void setResponseStatus(Activity activity, TextView tvStatus){
+    this.activity = activity;
+    this.tvStatus = tvStatus;
+  }
+
+  public void connect(){
+
+    try {
+      mqttManager.connect(clientKeyStore, new AWSIotMqttClientStatusCallback() {
+        @Override
+        public void onStatusChanged(final AWSIotMqttClientStatus status,
+                                    final Throwable throwable) {
+          Log.d(LOG_TAG, "Status = " + String.valueOf(status));
+
+          if (activity != null && tvStatus != null)
+          activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              if (status == AWSIotMqttClientStatus.Connecting) {
+                tvStatus.setText(getString(R.string.connecting));
+
+              } else if (status == AWSIotMqttClientStatus.Connected) {
+                tvStatus.setText(getString(R.string.connected));
+
+              } else if (status == AWSIotMqttClientStatus.Reconnecting) {
+                if (throwable != null) {
+                  Log.e(LOG_TAG, "Connection error.", throwable);
+                }
+                tvStatus.setText(getString(R.string.reconnecting));
+              } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
+                if (throwable != null) {
+                  Log.e(LOG_TAG, "Connection error.", throwable);
+                }
+                tvStatus.setText(getString(R.string.disconnected));
+              } else {
+                tvStatus.setText(getString(R.string.disconnected));
+
+              }
+            }
+          });
+        }
+      });
+    } catch (final Exception e) {
+      Log.e(LOG_TAG, "Connection error.", e);
+      tvStatus.setText(getString(R.string.error_message, e.getMessage()));
     }
   }
 }

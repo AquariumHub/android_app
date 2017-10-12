@@ -134,46 +134,11 @@ public class FragmentTabSetting extends Fragment {
       return;
     }
 
+    myService.setResponseStatus(getActivity(), tvStatus);
+    myService.connect();
+
     Log.d(LOG_TAG, "clientId = " + myService.clientId);
 
-    try {
-      myService.mqttManager.connect(myService.clientKeyStore, new AWSIotMqttClientStatusCallback() {
-                                                            @Override
-                                                            public void onStatusChanged(final AWSIotMqttClientStatus status,
-                                                            final Throwable throwable) {
-        Log.d(LOG_TAG, "Status = " + String.valueOf(status));
-
-        getActivity().runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-          if (status == AWSIotMqttClientStatus.Connecting) {
-            tvStatus.setText(getString(R.string.connecting));
-
-          } else if (status == AWSIotMqttClientStatus.Connected) {
-            tvStatus.setText(getString(R.string.connected));
-
-          } else if (status == AWSIotMqttClientStatus.Reconnecting) {
-            if (throwable != null) {
-              Log.e(LOG_TAG, "Connection error.", throwable);
-            }
-            tvStatus.setText(getString(R.string.reconnecting));
-          } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
-            if (throwable != null) {
-              Log.e(LOG_TAG, "Connection error.", throwable);
-            }
-            tvStatus.setText(getString(R.string.disconnected));
-          } else {
-            tvStatus.setText(getString(R.string.disconnected));
-
-          }
-          }
-        });
-      }
-    });
-    } catch (final Exception e) {
-      Log.e(LOG_TAG, "Connection error.", e);
-      tvStatus.setText(getString(R.string.error_message, e.getMessage()));
-    }
     }
   };
 

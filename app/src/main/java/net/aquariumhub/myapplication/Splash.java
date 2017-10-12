@@ -35,7 +35,9 @@ public class Splash extends Activity {
   }
 
   private void enterHomeActivity() {
-    Intent intent = new Intent(this, MainActivity.class);
+    Intent intent = new Intent(this, AwsService.class);
+    startService(intent);
+    intent = new Intent(this, MainActivity.class);
     startActivity(intent);
     finish();
   }
