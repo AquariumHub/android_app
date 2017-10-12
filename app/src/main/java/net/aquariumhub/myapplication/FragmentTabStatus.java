@@ -85,48 +85,59 @@ public class FragmentTabStatus extends Fragment {
   }
 
   @Override
+  public void setUserVisibleHint(boolean isVisibleToUser) {
+    super.setUserVisibleHint(isVisibleToUser);
+    if (isVisibleToUser) {
+
+      Intent myIntent = new Intent(getActivity(), AwsService.class);
+      getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
+
+      try {
+        final String topic = "sensingData";
+        myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
+                new AWSIotMqttNewMessageCallback() {
+
+                  @Override
+                  public void onMessageArrived(final String topic, final byte[] data) {
+
+                    getActivity().runOnUiThread(new Runnable() {
+
+                      @Override
+                      public void run() {
+
+                        try {
+                          String message = new String(data, "UTF-8");
+                          Log.d(LOG_TAG, "Message arrived:");
+                          Log.d(LOG_TAG, "   Topic: " + topic);
+                          Log.d(LOG_TAG, " Message: " + message);
+
+                          JSONObject mJsonObject = new JSONObject(message);
+
+                          tvHubTemperature.setText(String.format(getString(R.string.hub_temperature), mJsonObject.getString("temperature")));
+                          tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), mJsonObject.getString("brightness")));
+                          tvHubLightFrequency.setText(String.format(getString(R.string.hub_lightFrequency), mJsonObject.getString("lightFrequency")));
+
+                        } catch (UnsupportedEncodingException e) {
+                          Log.e(LOG_TAG, "Message encoding error.", e);
+                        } catch (JSONException e) {
+                          e.printStackTrace();
+                        }
+                      }
+                    });
+                  }
+                });
+      } catch (Exception e) {
+        Log.e(LOG_TAG, "Subscription error.", e);
+      }
+
+    }else{
+      // fragment is no longer visible
+    }
+  }
+
+  @Override
   public void onStart() {
     super.onStart();
-    Intent myIntent = new Intent(getActivity(), AwsService.class);
-    getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
-
-    try {
-      final String topic = "sensingData";
-      myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
-              new AWSIotMqttNewMessageCallback() {
-
-                @Override
-                public void onMessageArrived(final String topic, final byte[] data) {
-
-                  getActivity().runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                      try {
-                        String message = new String(data, "UTF-8");
-                        Log.d(LOG_TAG, "Message arrived:");
-                        Log.d(LOG_TAG, "   Topic: " + topic);
-                        Log.d(LOG_TAG, " Message: " + message);
-
-                        JSONObject mJsonObject = new JSONObject(message);
-
-                        tvHubTemperature.setText(String.format(getString(R.string.hub_temperature), mJsonObject.getString("temperature")));
-                        tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), mJsonObject.getString("brightness")));
-                        tvHubLightFrequency.setText(String.format(getString(R.string.hub_lightFrequency), mJsonObject.getString("lightFrequency")));
-
-                      } catch (UnsupportedEncodingException e) {
-                        Log.e(LOG_TAG, "Message encoding error.", e);
-                      } catch (JSONException e) {
-                        e.printStackTrace();
-                      }
-                    }
-                  });
-                }
-              });
-    } catch (Exception e) {
-      Log.e(LOG_TAG, "Subscription error.", e);
-    }
   }
 
   @Override

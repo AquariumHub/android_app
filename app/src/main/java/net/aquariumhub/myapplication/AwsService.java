@@ -25,7 +25,7 @@ public class AwsService extends Service {
   /**
    * Tag for looking for error messages in the android device monitor
    */
-  public static final String TAG_LOG = "AwsService";
+  public static final String TAG = "AwsService";
   static final String LOG_TAG = AwsService.class.getCanonicalName();
 
   // --- Constants to modify per your configuration ---
@@ -67,7 +67,7 @@ public class AwsService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    Log.d(TAG_LOG, "onCreate() executed");
+    Log.d(TAG, "onCreate()");
 
     // MQTT client IDs are required to be unique per AWS IoT account.
     // This UUID is "practically unique" but does not _guarantee_
@@ -186,14 +186,14 @@ public class AwsService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    Log.d(TAG_LOG, "onStartCommand() executed");
+    Log.d(TAG, "onStartCommand() executed");
     return super.onStartCommand(intent, flags, startId);
   }
 
   @Override
   public void onDestroy() {
+    Log.d(TAG, "onDestroy()");
     super.onDestroy();
-    Log.d(TAG_LOG, "onDestroy() executed");
   }
 
   @Override

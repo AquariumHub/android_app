@@ -1,5 +1,6 @@
 package net.aquariumhub.myapplication;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -33,7 +34,7 @@ public class FragmentTabHub extends Fragment {
   /**
    * Tag for looking for error messages in the android device monitor
    */
-  final static String LOG_TAG = "FragmentTabHub";
+  final static String TAG = "FragmentTabHub";
 
   private AwsService myService;
   boolean mBounded;
@@ -45,7 +46,7 @@ public class FragmentTabHub extends Fragment {
 /*http://aquarium-hub.tunnel.qydev.com/?action=stream http://13.115.112.36:4443/?action=stream*/
   final String URL_VIDEO = "http://aquariumhub.ngrok.cc/?action=stream";
   MjpegView mMjpegView;
-  boolean flag_liveStream = true;
+  // boolean flag_liveStream = true;
 
   SeekBar seekbarAP700Intensity;
   SeekBar seekbarAP700Color;
@@ -98,8 +99,7 @@ public class FragmentTabHub extends Fragment {
     aSwitchLiveStream.setOnCheckedChangeListener(switchLiveStreamOnClick);
 
     mMjpegView = (MjpegView) getActivity().findViewById(R.id.mjpeg_view);
-    mMjpegView.startPlayback();
-    aSwitchLiveStream.setChecked(true);
+    aSwitchLiveStream.setChecked(false);
     new DoRead().execute(URL_VIDEO);
   }
 
@@ -109,11 +109,6 @@ public class FragmentTabHub extends Fragment {
     Intent myIntent = new Intent(getActivity(), AwsService.class);
     getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
 
-    if(flag_liveStream){
-      mMjpegView.startPlayback();
-    }else{
-      mMjpegView.stopPlayback();
-    }
   }
 
   @Override
@@ -127,14 +122,15 @@ public class FragmentTabHub extends Fragment {
   }
 
   public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
+
     protected MjpegInputStream doInBackground(String... url) {
       //TODO: if camera has authentication deal with it and don't just not work
       HttpResponse res;
       DefaultHttpClient httpclient = new DefaultHttpClient();
-      Log.d(LOG_TAG, "1. Sending http request");
+      Log.d(TAG, "1. Sending http request");
       try {
         res = httpclient.execute(new HttpGet(URI.create(url[0])));
-        Log.d(LOG_TAG, "2. Request finished, status = " + res.getStatusLine().getStatusCode());
+        Log.d(TAG, "2. Request finished, status = " + res.getStatusLine().getStatusCode());
         if (res.getStatusLine().getStatusCode() == 401) {
           //You must turn off camera User Access Control before this will work
           return null;
@@ -142,21 +138,26 @@ public class FragmentTabHub extends Fragment {
         return new MjpegInputStream(res.getEntity().getContent());
       } catch (ClientProtocolException e) {
         e.printStackTrace();
-        Log.d(LOG_TAG, "Request failed-ClientProtocolException", e);
+        Log.d(TAG, "Request failed-ClientProtocolException", e);
         //Error connecting to camera
       } catch (IOException e) {
         e.printStackTrace();
-        Log.d(LOG_TAG, "Request failed-IOException", e);
+        Log.d(TAG, "Request failed-IOException", e);
         //Error connecting to camera
       }
-
       return null;
     }
 
+    @Override
     protected void onPostExecute(MjpegInputStream result) {
       mMjpegView.setSource(result);
       mMjpegView.setDisplayMode(MjpegView.SIZE_BEST_FIT);
       mMjpegView.showFps(true);
+
+      if (!aSwitchLiveStream.isChecked()){
+        Log.d(TAG, "switch of live stream is not checked");
+        mMjpegView.stopPlayback();
+      }
     }
   }
 
@@ -192,7 +193,7 @@ public class FragmentTabHub extends Fragment {
         //tvAp700Intensity.setText("AP700: " + "亮度:" + String.valueOf(valueOfProgress));
         myService.mqttManager.publishString("{\"state\":{\"desired\":{\"AP700\":{\"intensity\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
       } catch (Exception e) {
-        Log.e(LOG_TAG, "something wrong with seekbar of ap700 intensity.", e);
+        Log.e(TAG, "something wrong with seekbar of ap700 intensity.", e);
       }
     }
   };
@@ -218,7 +219,7 @@ public class FragmentTabHub extends Fragment {
         //tvAp700Color.setText("AP700: " + "顏色:" + String.valueOf(valueOfProgress));
         myService.mqttManager.publishString("{\"state\":{\"desired\":{\"AP700\":{\"color\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
       } catch (Exception e) {
-        Log.e(LOG_TAG, "something wrong with seek bar of ap700 color.", e);
+        Log.e(TAG, "something wrong with seek bar of ap700 color.", e);
       }
     }
   };
@@ -244,7 +245,7 @@ public class FragmentTabHub extends Fragment {
         //tvA360Intensity.setText("A360: " + "亮度:" + String.valueOf(valueOfProgress));
         myService.mqttManager.publishString("{\"state\":{\"desired\":{\"A360\":{\"intensity\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
       } catch (Exception e) {
-        Log.e(LOG_TAG, "something wrong with seek bar of a360 intensity.", e);
+        Log.e(TAG, "something wrong with seek bar of a360 intensity.", e);
       }
     }
   };
@@ -271,7 +272,7 @@ public class FragmentTabHub extends Fragment {
         //tvA360Color.setText("A360: " + "顏色:" + String.valueOf(valueOfProgress));
         myService.mqttManager.publishString("{\"state\":{\"desired\":{\"A360\":{\"color\":" + String.valueOf(valueOfProgress) + "}}}}", TOPIC_SHADOW_UPDATE, AWSIotMqttQos.QOS0);
       } catch (Exception e) {
-        Log.e(LOG_TAG, "something wrong with seek bar of a360 color.", e);
+        Log.e(TAG, "something wrong with seek bar of a360 color.", e);
       }
     }
   };

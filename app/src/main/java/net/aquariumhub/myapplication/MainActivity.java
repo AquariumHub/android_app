@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity
 
     initView(); // setup the default resources of view objects
 
+    // ImageView socialLogin = (ImageView)  navigationView.getHeaderView(0).findViewById(R.id.social_login);
     ImageView userPhoto = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.user_photo);
     TextView userName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name);
     TextView userstatus = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_status);
@@ -100,14 +101,15 @@ public class MainActivity extends AppCompatActivity
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(userPhoto);
         userName.setText(name);
-        userstatus.setText(String.format(getString(R.string.user_status), "Facebook"));
+        userstatus.setText("Facebook");
+        // socialLogin.setBackgroundResource(R.drawable.logout_white);
       } catch (Exception e) {
-        Log.e(TAG, "user profile: ", e);
+        Log.e(TAG, "Errors occurred while getting user profile: ", e);
       }
     } else {
       userPhoto.setImageResource(R.mipmap.ic_launcher_round);
       userName.setText(R.string.app_name);
-      userstatus.setText(String.format(getString(R.string.user_status), "Facebook"));
+      userstatus.setText("Social Website");
     }
 
     FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity
     };
 
     mViewPager.setAdapter(mAdapter);
-    mViewPager.setOffscreenPageLimit(2);
+    // mViewPager.setOffscreenPageLimit(2);
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
       private int currentIndex;
