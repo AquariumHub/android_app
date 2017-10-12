@@ -1,13 +1,10 @@
 package net.aquariumhub.myapplication;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -56,6 +54,7 @@ public class FragmentTabHub extends Fragment {
   SeekBar seekbarA360Color;
 
   Switch aSwitchLiveStream;
+  ImageView imageViewLiveStream;
 
   ServiceConnection serviceConnection = new ServiceConnection() {
     @Override
@@ -100,6 +99,8 @@ public class FragmentTabHub extends Fragment {
     aSwitchLiveStream = (Switch) getActivity().findViewById(R.id.switch_liveStream);
     aSwitchLiveStream.setOnCheckedChangeListener(switchLiveStreamOnClick);
 
+    imageViewLiveStream = (ImageView) getActivity().findViewById(R.id.mjpeg_imageView);
+
     mMjpegView = (MjpegView) getActivity().findViewById(R.id.mjpeg_view);
     aSwitchLiveStream.setChecked(false);
     new DoRead().execute(URL_VIDEO);
@@ -140,6 +141,8 @@ public class FragmentTabHub extends Fragment {
 
   public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
 
+    private int responseStatusCode;
+
     protected MjpegInputStream doInBackground(String... url) {
       //TODO: if camera has authentication deal with it and don't just not work
       HttpResponse res;
@@ -148,6 +151,7 @@ public class FragmentTabHub extends Fragment {
       try {
         res = httpclient.execute(new HttpGet(URI.create(url[0])));
         Log.d(TAG, "2. Request finished, status = " + res.getStatusLine().getStatusCode());
+        responseStatusCode = res.getStatusLine().getStatusCode();
         if (res.getStatusLine().getStatusCode() == 401) {
           //You must turn off camera User Access Control before this will work
           return null;
@@ -174,6 +178,11 @@ public class FragmentTabHub extends Fragment {
       if (!aSwitchLiveStream.isChecked() || !isVisible){
         Log.d(TAG, "switch of live stream is not checked");
         mMjpegView.stopPlayback();
+      }
+      if (responseStatusCode == 404){
+        imageViewLiveStream.setVisibility(View.VISIBLE);
+      } else {
+        imageViewLiveStream.setVisibility(View.GONE);
       }
     }
   }

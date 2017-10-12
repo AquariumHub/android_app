@@ -27,10 +27,24 @@
             android:layout_marginStart="5dp" />
     </LinearLayout>
 
-    <net.aquariumhub.myapplication.MjpegView
-        android:id="@+id/mjpeg_view"
-        android:layout_width="match_parent"
-        android:layout_height="240dp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="240dp">
+
+        <net.aquariumhub.myapplication.MjpegView
+            android:id="@+id/mjpeg_view"
+            android:layout_width="match_parent"
+            android:layout_height="240dp" />
+
+        <ImageView
+            android:id="@+id/mjpeg_imageView"
+            android:layout_width="360dp"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@drawable/http_404"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/title_ap700"
