@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -121,6 +123,21 @@ public class FragmentTabHub extends Fragment {
     }
   }
 
+  private boolean isVisible = false;
+
+  @Override
+  public void setUserVisibleHint(boolean isVisibleToUser) {
+    super.setUserVisibleHint(isVisibleToUser);
+
+    if (isVisibleToUser){
+      isVisible = true;
+      new DoRead().execute(URL_VIDEO);
+    } else {
+      isVisible = false;
+      new DoRead().execute(URL_VIDEO);
+    }
+  }
+
   public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
 
     protected MjpegInputStream doInBackground(String... url) {
@@ -154,7 +171,7 @@ public class FragmentTabHub extends Fragment {
       mMjpegView.setDisplayMode(MjpegView.SIZE_BEST_FIT);
       mMjpegView.showFps(true);
 
-      if (!aSwitchLiveStream.isChecked()){
+      if (!aSwitchLiveStream.isChecked() || !isVisible){
         Log.d(TAG, "switch of live stream is not checked");
         mMjpegView.stopPlayback();
       }
