@@ -29,7 +29,7 @@ public class FragmentTabSetting extends Fragment {
   /**
    * Tag for looking for error messages in the android device monitor
    */
-  private static final String LOG_TAG = "FragmentTabSetting";
+  private static final String TAG = "FragmentTabSetting";
 
   private AwsService myService;
   boolean mBounded;
@@ -52,15 +52,16 @@ public class FragmentTabSetting extends Fragment {
   ServiceConnection serviceConnection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-      //Toast.makeText(getActivity(), "Service is connected", Toast.LENGTH_LONG).show();
+      Log.d(TAG, "onServiceConnected");
       AwsService.MyBinder myBinder = (AwsService.MyBinder) service;
       myService = myBinder.getAwsServiceInstance();
       mBounded = true;
+      tvStatus.setText(myService.currentStatus);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-      //Toast.makeText(getActivity(), "Service is disconnected", Toast.LENGTH_LONG).show();
+      Log.d(TAG, "onServiceDisconnected");
       mBounded = false;
       myService = null;
     }
@@ -121,8 +122,6 @@ public class FragmentTabSetting extends Fragment {
 
     clientId = UUID.randomUUID().toString();
     tvClientId.setText(clientId);
-
-
   }
 
   View.OnClickListener connectClick = new View.OnClickListener() {
@@ -137,7 +136,7 @@ public class FragmentTabSetting extends Fragment {
     myService.setResponseStatus(getActivity(), tvStatus);
     myService.connect();
 
-    Log.d(LOG_TAG, "clientId = " + myService.clientId);
+    Log.d(TAG, "clientId = " + myService.clientId);
 
     }
   };
@@ -148,7 +147,7 @@ public class FragmentTabSetting extends Fragment {
 
     final String topic = txtSubscribe.getText().toString();
 
-    Log.d(LOG_TAG, "topic = " + topic);
+    Log.d(TAG, "topic = " + topic);
 
     try {
       myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
@@ -160,21 +159,21 @@ public class FragmentTabSetting extends Fragment {
                       public void run() {
                       try {
                         String message = new String(data, "UTF-8");
-                        Log.d(LOG_TAG, "Message arrived:");
-                        Log.d(LOG_TAG, "   Topic: " + topic);
-                        Log.d(LOG_TAG, " Message: " + message);
+                        Log.d(TAG, "Message arrived:");
+                        Log.d(TAG, "   Topic: " + topic);
+                        Log.d(TAG, " Message: " + message);
 
                         tvLastMessage.setText(message);
 
                       } catch (UnsupportedEncodingException e) {
-                        Log.e(LOG_TAG, "Message encoding error.", e);
+                        Log.e(TAG, "Message encoding error.", e);
                       }
                       }
                     });
                   }
                 });
     } catch (Exception e) {
-      Log.e(LOG_TAG, "Subscription error.", e);
+      Log.e(TAG, "Subscription error.", e);
     }
     }
   };
@@ -187,7 +186,7 @@ public class FragmentTabSetting extends Fragment {
       try {
         myService.mqttManager.publishString(msg, topic, AWSIotMqttQos.QOS0);
       } catch (Exception e) {
-        Log.e(LOG_TAG, "Publish error.", e);
+        Log.e(TAG, "Publish error.", e);
       }
     }
   };
@@ -198,7 +197,7 @@ public class FragmentTabSetting extends Fragment {
       try {
         myService.mqttManager.disconnect();
       } catch (Exception e) {
-        Log.e(LOG_TAG, "Disconnect error.", e);
+        Log.e(TAG, "Disconnect error.", e);
       }
     }
   };

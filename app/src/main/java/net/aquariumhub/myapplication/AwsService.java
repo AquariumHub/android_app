@@ -23,6 +23,7 @@ import com.amazonaws.services.iot.model.CreateKeysAndCertificateRequest;
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateResult;
 
 import java.security.KeyStore;
+import java.security.PrivateKey;
 import java.util.UUID;
 
 public class AwsService extends Service {
@@ -213,7 +214,8 @@ public class AwsService extends Service {
   }
 
   private Activity activity = null;
-  TextView tvStatus = null;
+  private TextView tvStatus = null;
+  public String currentStatus = "disconnected";
 
   public void setResponseStatus(Activity activity, TextView tvStatus){
     this.activity = activity;
@@ -229,29 +231,31 @@ public class AwsService extends Service {
                                     final Throwable throwable) {
           Log.d(LOG_TAG, "Status = " + String.valueOf(status));
 
-          if (activity != null && tvStatus != null)
+          if ((activity != null && tvStatus != null) && currentStatus != null)
           activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
               if (status == AWSIotMqttClientStatus.Connecting) {
+                currentStatus = getString(R.string.connecting);
                 tvStatus.setText(getString(R.string.connecting));
-
               } else if (status == AWSIotMqttClientStatus.Connected) {
+                currentStatus = getString(R.string.connected);
                 tvStatus.setText(getString(R.string.connected));
-
               } else if (status == AWSIotMqttClientStatus.Reconnecting) {
                 if (throwable != null) {
                   Log.e(LOG_TAG, "Connection error.", throwable);
                 }
+                currentStatus = getString(R.string.reconnecting);
                 tvStatus.setText(getString(R.string.reconnecting));
               } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
                 if (throwable != null) {
                   Log.e(LOG_TAG, "Connection error.", throwable);
                 }
+                currentStatus = getString(R.string.disconnected);
                 tvStatus.setText(getString(R.string.disconnected));
               } else {
+                currentStatus = getString(R.string.disconnected);
                 tvStatus.setText(getString(R.string.disconnected));
-
               }
             }
           });
@@ -259,6 +263,7 @@ public class AwsService extends Service {
       });
     } catch (final Exception e) {
       Log.e(LOG_TAG, "Connection error.", e);
+      currentStatus = getString(R.string.error_message, e.getMessage());
       tvStatus.setText(getString(R.string.error_message, e.getMessage()));
     }
   }
