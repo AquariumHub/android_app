@@ -130,7 +130,7 @@ public class FragmentTabStatus extends Fragment {
         Log.e(LOG_TAG, "Subscription error.", e);
       }
 
-    }else{
+    } else {
       // fragment is no longer visible
     }
   }

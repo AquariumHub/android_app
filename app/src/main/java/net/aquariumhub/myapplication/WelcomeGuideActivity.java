@@ -19,7 +19,7 @@ import java.util.List;
 
 public class WelcomeGuideActivity extends Activity {
 
-  final String LOG_TAG = "WelcomeGuideActivity";
+  final String TAG = "WelcomeGuideActivity";
 
   LoginButton loginButton;
   CallbackManager callbackManager;
@@ -44,7 +44,7 @@ public class WelcomeGuideActivity extends Activity {
         try{
           enterMainActivity();
         } catch (Exception e){
-          Log.e(LOG_TAG, "enterMainActivity(): ", e);
+          Log.e(TAG, "enterMainActivity(): ", e);
         }
       }
 
@@ -55,7 +55,7 @@ public class WelcomeGuideActivity extends Activity {
 
       @Override
       public void onError(FacebookException error) {
-        Log.e(LOG_TAG, "FacebookException: ", error );
+        Log.e(TAG, "FacebookException: ", error );
         enterMainActivity();
       }
     });

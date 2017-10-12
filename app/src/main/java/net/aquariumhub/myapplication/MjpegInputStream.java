@@ -18,12 +18,11 @@ import java.util.Properties;
 /**
  * Created by boywhychen on 17/1/4.
  */
-public class MjpegInputStream  extends DataInputStream
-{
+public class MjpegInputStream extends DataInputStream {
   private static final String TAG = "MjpegInputStream";
 
-  private final byte[] SOI_MARKER = { (byte) 0xFF, (byte) 0xD8 };
-  private final byte[] EOF_MARKER = { (byte) 0xFF, (byte) 0xD9 };
+  private final byte[] SOI_MARKER = {(byte) 0xFF, (byte) 0xD8};
+  private final byte[] EOF_MARKER = {(byte) 0xFF, (byte) 0xD9};
   private final String CONTENT_LENGTH = "Content-Length";
   private final static int HEADER_MAX_LENGTH = 100;
   private final static int FRAME_MAX_LENGTH = 40000 + HEADER_MAX_LENGTH;
@@ -36,11 +35,11 @@ public class MjpegInputStream  extends DataInputStream
   private int getEndOfSeqeunce(DataInputStream in, byte[] sequence) throws IOException {
     int seqIndex = 0;
     byte c;
-    for(int i=0; i < FRAME_MAX_LENGTH; i++) {
+    for (int i = 0; i < FRAME_MAX_LENGTH; i++) {
       c = (byte) in.readUnsignedByte();
-      if(c == sequence[seqIndex]) {
+      if (c == sequence[seqIndex]) {
         seqIndex++;
-        if(seqIndex == sequence.length) {
+        if (seqIndex == sequence.length) {
           return i + 1;
         }
       } else {

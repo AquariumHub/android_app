@@ -16,16 +16,16 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
+public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
   private static final String TAG = "MjpegView";
 
-  public final static int POSITION_UPPER_LEFT  = 9;
+  public final static int POSITION_UPPER_LEFT = 9;
   public final static int POSITION_UPPER_RIGHT = 3;
-  public final static int POSITION_LOWER_LEFT  = 12;
+  public final static int POSITION_LOWER_LEFT = 12;
   public final static int POSITION_LOWER_RIGHT = 6;
 
-  public final static int SIZE_STANDARD   = 1;
-  public final static int SIZE_BEST_FIT   = 4;
+  public final static int SIZE_STANDARD = 1;
+  public final static int SIZE_BEST_FIT = 4;
   public final static int SIZE_FULLSCREEN = 8;
 
   private MjpegViewThread thread;
@@ -41,6 +41,7 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
   private int dispHeight;
   private int displayMode;
   private Context mContext;
+
   public class MjpegViewThread extends Thread {
     private SurfaceHolder mSurfaceHolder;
     private int frameCounter = 0;
@@ -49,7 +50,7 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
 
     public MjpegViewThread(SurfaceHolder surfaceHolder, Context context) {
       mSurfaceHolder = surfaceHolder;
-      mContext=context;
+      mContext = context;
     }
 
     private Rect destRect(int bmw, int bmh) {
@@ -72,14 +73,14 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
         tempy = (dispHeight / 2) - (bmh / 2);
         return new Rect(tempx, tempy, bmw + tempx, bmh + tempy);
       }
-      if (displayMode == MjpegView.SIZE_FULLSCREEN){
+      if (displayMode == MjpegView.SIZE_FULLSCREEN) {
         return new Rect(0, 0, dispWidth, dispHeight);
       }
       return null;
     }
 
     public void setSurfaceSize(int width, int height) {
-      synchronized(mSurfaceHolder) {
+      synchronized (mSurfaceHolder) {
         dispWidth = width;
         dispHeight = height;
       }
@@ -88,14 +89,14 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap makeFpsOverlay(Paint p, String text) {
       Rect b = new Rect();
       p.getTextBounds(text, 0, text.length(), b);
-      int bwidth  = b.width()+2;
-      int bheight = b.height()+2;
+      int bwidth = b.width() + 2;
+      int bheight = b.height() + 2;
       Bitmap bm = Bitmap.createBitmap(bwidth, bheight, Bitmap.Config.ARGB_8888);
       Canvas c = new Canvas(bm);
       p.setColor(overlayBackgroundColor);
       c.drawRect(0, 0, bwidth, bheight, p);
       p.setColor(overlayTextColor);
-      c.drawText(text, -b.left+1, (bheight/2)-((p.ascent()+p.descent())/2)+1, p);
+      c.drawText(text, -b.left + 1, (bheight / 2) - ((p.ascent() + p.descent()) / 2) + 1, p);
       return bm;
     }
 
@@ -110,26 +111,26 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
       Paint p = new Paint();
       String fps;
       while (mRun) {
-        if(surfaceDone) {
+        if (surfaceDone) {
           try {
             c = mSurfaceHolder.lockCanvas();
             synchronized (mSurfaceHolder) {
               try {
                 bm = mIn.readMjpegFrame();
-                destRect = destRect(bm.getWidth(),bm.getHeight());
+                destRect = destRect(bm.getWidth(), bm.getHeight());
                 c.drawColor(Color.BLACK);
                 c.drawBitmap(bm, null, destRect, p);
-                if(showFps) {
+                if (showFps) {
                   p.setXfermode(mode);
-                  if(ovl != null) {
-                    height = ((ovlPos & 1) == 1) ? destRect.top : destRect.bottom-ovl.getHeight();
-                    width  = ((ovlPos & 8) == 8) ? destRect.left : destRect.right -ovl.getWidth();
+                  if (ovl != null) {
+                    height = ((ovlPos & 1) == 1) ? destRect.top : destRect.bottom - ovl.getHeight();
+                    width = ((ovlPos & 8) == 8) ? destRect.left : destRect.right - ovl.getWidth();
                     c.drawBitmap(ovl, width, height, null);
                   }
                   p.setXfermode(null);
                   frameCounter++;
-                  if((System.currentTimeMillis() - start) >= 1000) {
-                    fps = String.valueOf(frameCounter)+" fps";
+                  if ((System.currentTimeMillis() - start) >= 1000) {
+                    fps = String.valueOf(frameCounter) + " fps";
                     frameCounter = 0;
                     start = System.currentTimeMillis();
                     ovl = makeFpsOverlay(overlayPaint, fps);
@@ -138,9 +139,7 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
               } catch (IOException e) {
                 e.getStackTrace();
                 Log.d(TAG, "catch IOException hit in run", e);
-              }
-              catch (Exception e)
-              {
+              } catch (Exception e) {
                 e.getStackTrace();
                 Log.d(TAG, "catch Exception hit in run", e);
               }
@@ -173,16 +172,14 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
   }
 
   public void startPlayback() {
-    if(mIn != null) {
+    if (mIn != null) {
       mRun = true;
       //never use this thread
-      if(thread.getState()==Thread.State.NEW)
-      {
+      if (thread.getState() == Thread.State.NEW) {
         thread.start();
       }
       //alread use
-      else if (thread.getState()==Thread.State.TERMINATED)
-      {
+      else if (thread.getState() == Thread.State.TERMINATED) {
         init(mContext);
         thread.start();
       }
@@ -192,7 +189,7 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
   public void stopPlayback() {
     mRun = false;
     boolean retry = true;
-    while(retry) {
+    while (retry) {
       try {
         thread.join();
         retry = false;
@@ -204,7 +201,8 @@ public class MjpegView  extends SurfaceView implements SurfaceHolder.Callback {
   }
 
   public MjpegView(Context context, AttributeSet attrs) {
-    super(context, attrs); init(context);
+    super(context, attrs);
+    init(context);
   }
 
   public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {

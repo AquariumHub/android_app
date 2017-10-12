@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
   /**
    * Tag for looking for error messages in the android device monitor
    */
-  private static final String TAG = "LogDemo";
+  private static final String TAG = "MainActivity";
 
   private ViewPager mViewPager;
   private List<Fragment> mFragments = new ArrayList<>(); // list of fragments

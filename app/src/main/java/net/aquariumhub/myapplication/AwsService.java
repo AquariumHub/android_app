@@ -217,12 +217,12 @@ public class AwsService extends Service {
   private TextView tvStatus = null;
   public String currentStatus = "disconnected";
 
-  public void setResponseStatus(Activity activity, TextView tvStatus){
+  public void setResponseStatus(Activity activity, TextView tvStatus) {
     this.activity = activity;
     this.tvStatus = tvStatus;
   }
 
-  public void connect(){
+  public void connect() {
 
     try {
       mqttManager.connect(clientKeyStore, new AWSIotMqttClientStatusCallback() {
@@ -232,33 +232,33 @@ public class AwsService extends Service {
           Log.d(LOG_TAG, "Status = " + String.valueOf(status));
 
           if ((activity != null && tvStatus != null) && currentStatus != null)
-          activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              if (status == AWSIotMqttClientStatus.Connecting) {
-                currentStatus = getString(R.string.connecting);
-                tvStatus.setText(getString(R.string.connecting));
-              } else if (status == AWSIotMqttClientStatus.Connected) {
-                currentStatus = getString(R.string.connected);
-                tvStatus.setText(getString(R.string.connected));
-              } else if (status == AWSIotMqttClientStatus.Reconnecting) {
-                if (throwable != null) {
-                  Log.e(LOG_TAG, "Connection error.", throwable);
+            activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                if (status == AWSIotMqttClientStatus.Connecting) {
+                  currentStatus = getString(R.string.connecting);
+                  tvStatus.setText(getString(R.string.connecting));
+                } else if (status == AWSIotMqttClientStatus.Connected) {
+                  currentStatus = getString(R.string.connected);
+                  tvStatus.setText(getString(R.string.connected));
+                } else if (status == AWSIotMqttClientStatus.Reconnecting) {
+                  if (throwable != null) {
+                    Log.e(LOG_TAG, "Connection error.", throwable);
+                  }
+                  currentStatus = getString(R.string.reconnecting);
+                  tvStatus.setText(getString(R.string.reconnecting));
+                } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
+                  if (throwable != null) {
+                    Log.e(LOG_TAG, "Connection error.", throwable);
+                  }
+                  currentStatus = getString(R.string.disconnected);
+                  tvStatus.setText(getString(R.string.disconnected));
+                } else {
+                  currentStatus = getString(R.string.disconnected);
+                  tvStatus.setText(getString(R.string.disconnected));
                 }
-                currentStatus = getString(R.string.reconnecting);
-                tvStatus.setText(getString(R.string.reconnecting));
-              } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
-                if (throwable != null) {
-                  Log.e(LOG_TAG, "Connection error.", throwable);
-                }
-                currentStatus = getString(R.string.disconnected);
-                tvStatus.setText(getString(R.string.disconnected));
-              } else {
-                currentStatus = getString(R.string.disconnected);
-                tvStatus.setText(getString(R.string.disconnected));
               }
-            }
-          });
+            });
         }
       });
     } catch (final Exception e) {

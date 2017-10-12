@@ -43,7 +43,7 @@ public class FragmentTabHub extends Fragment {
   TextView tvAp700Color;
   TextView tvA360Intensity;
   TextView tvA360Color;
-/*http://aquarium-hub.tunnel.qydev.com/?action=stream http://13.115.112.36:4443/?action=stream*/
+  /*http://aquarium-hub.tunnel.qydev.com/?action=stream http://13.115.112.36:4443/?action=stream*/
   final String URL_VIDEO = "http://aquariumhub.ngrok.cc/?action=stream";
   MjpegView mMjpegView;
   // boolean flag_liveStream = true;
@@ -130,7 +130,7 @@ public class FragmentTabHub extends Fragment {
   public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
 
-    if (isVisibleToUser){
+    if (isVisibleToUser) {
       isVisible = true;
       new DoRead().execute(URL_VIDEO);
     } else {
@@ -175,11 +175,11 @@ public class FragmentTabHub extends Fragment {
       mMjpegView.setDisplayMode(MjpegView.SIZE_BEST_FIT);
       mMjpegView.showFps(true);
 
-      if (!aSwitchLiveStream.isChecked() || !isVisible){
+      if (!aSwitchLiveStream.isChecked() || !isVisible) {
         Log.d(TAG, "switch of live stream is not checked");
         mMjpegView.stopPlayback();
       }
-      if (responseStatusCode == 404){
+      if (responseStatusCode == 404) {
         imageViewLiveStream.setVisibility(View.VISIBLE);
       } else {
         imageViewLiveStream.setVisibility(View.GONE);
@@ -190,9 +190,9 @@ public class FragmentTabHub extends Fragment {
   Switch.OnCheckedChangeListener switchLiveStreamOnClick = new Switch.OnCheckedChangeListener() {
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-      if(isChecked){
+      if (isChecked) {
         mMjpegView.startPlayback();
-      }else{
+      } else {
         mMjpegView.stopPlayback();
       }
     }

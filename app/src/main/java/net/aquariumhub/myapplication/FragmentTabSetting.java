@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.mobileconnectors.iot.AWSIotMqttClientStatusCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttNewMessageCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
 
@@ -23,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import static android.content.Context.BIND_AUTO_CREATE;
-import com.facebook.FacebookSdk;
 
 public class FragmentTabSetting extends Fragment {
   /**
@@ -128,15 +126,17 @@ public class FragmentTabSetting extends Fragment {
     @Override
     public void onClick(View v) {
 
-    if (!myService.awsConnectionAvaliabe) {
-      Toast.makeText(getActivity(), "server is not ready, please check your setting or try it later", Toast.LENGTH_LONG).show();
-      return;
-    }
+      if (!myService.awsConnectionAvaliabe) {
+        Toast.makeText(getActivity(),
+                "server is not ready, please check your setting or try it later"
+                , Toast.LENGTH_LONG).show();
+        return;
+      }
 
-    myService.setResponseStatus(getActivity(), tvStatus);
-    myService.connect();
+      myService.setResponseStatus(getActivity(), tvStatus);
+      myService.connect();
 
-    Log.d(TAG, "clientId = " + myService.clientId);
+      Log.d(TAG, "clientId = " + myService.clientId);
 
     }
   };
@@ -145,36 +145,36 @@ public class FragmentTabSetting extends Fragment {
     @Override
     public void onClick(View v) {
 
-    final String topic = txtSubscribe.getText().toString();
+      final String topic = txtSubscribe.getText().toString();
 
-    Log.d(TAG, "topic = " + topic);
+      Log.d(TAG, "topic = " + topic);
 
-    try {
-      myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
+      try {
+        myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
                 new AWSIotMqttNewMessageCallback() {
                   @Override
                   public void onMessageArrived(final String topic, final byte[] data) {
                     getActivity().runOnUiThread(new Runnable() {
                       @Override
                       public void run() {
-                      try {
-                        String message = new String(data, "UTF-8");
-                        Log.d(TAG, "Message arrived:");
-                        Log.d(TAG, "   Topic: " + topic);
-                        Log.d(TAG, " Message: " + message);
+                        try {
+                          String message = new String(data, "UTF-8");
+                          Log.d(TAG, "Message arrived:");
+                          Log.d(TAG, "   Topic: " + topic);
+                          Log.d(TAG, " Message: " + message);
 
-                        tvLastMessage.setText(message);
+                          tvLastMessage.setText(message);
 
-                      } catch (UnsupportedEncodingException e) {
-                        Log.e(TAG, "Message encoding error.", e);
-                      }
+                        } catch (UnsupportedEncodingException e) {
+                          Log.e(TAG, "Message encoding error.", e);
+                        }
                       }
                     });
                   }
                 });
-    } catch (Exception e) {
-      Log.e(TAG, "Subscription error.", e);
-    }
+      } catch (Exception e) {
+        Log.e(TAG, "Subscription error.", e);
+      }
     }
   };
 
