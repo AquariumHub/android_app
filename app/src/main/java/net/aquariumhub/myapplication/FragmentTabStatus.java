@@ -107,11 +107,14 @@ public class FragmentTabStatus extends Fragment {
 
                         try {
                           String message = new String(data, "UTF-8");
-                          Log.d(LOG_TAG, "Message arrived:");
-                          Log.d(LOG_TAG, "   Topic: " + topic);
-                          Log.d(LOG_TAG, " Message: " + message);
-
                           JSONObject mJsonObject = new JSONObject(message);
+
+                          Log.d(LOG_TAG, "Message arrived:");
+                          Log.d(LOG_TAG, "Topic: " + topic);
+                          Log.d(LOG_TAG, "Temperature: " + mJsonObject.getString("temperature") +
+                                  "\nBrightness: " + mJsonObject.getString("brightness") +
+                                  "\nLightFrequency: " + mJsonObject.getString("lightFrequency") +
+                                  "\n---------------------------------");
 
                           tvHubTemperature.setText(String.format(getString(R.string.hub_temperature), mJsonObject.getString("temperature")));
                           tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), mJsonObject.getString("brightness")));

@@ -41,11 +41,7 @@ public class WelcomeGuideActivity extends Activity {
     loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
       @Override
       public void onSuccess(LoginResult loginResult) {
-        try{
           enterMainActivity();
-        } catch (Exception e){
-          Log.e(TAG, "enterMainActivity(): ", e);
-        }
       }
 
       @Override
@@ -66,20 +62,20 @@ public class WelcomeGuideActivity extends Activity {
     super.onPause();
     SharedPreferences activityPreferences = getApplicationContext().getSharedPreferences("app", Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = activityPreferences.edit();
-    editor.putBoolean("first_open", true);
+    editor.putBoolean("first_open", false);
     editor.apply();
     finish();
   }
 
   public void enterMainActivity() {
-    Intent intent = new Intent(WelcomeGuideActivity.this, MainActivity.class);
-    startActivity(intent);
 
     SharedPreferences activityPreferences = getApplicationContext().getSharedPreferences("app", Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = activityPreferences.edit();
-    editor.putBoolean("first_open", true);
+    editor.putBoolean("first_open", false);
     editor.apply();
 
+    Intent intent = new Intent(this, MainActivity.class);
+    startActivity(intent);
     finish();
   }
 

@@ -15,10 +15,12 @@ public class Splash extends Activity {
     // if it is the first time the app is installed
     boolean isFirstOpen;
     SharedPreferences preferences = this.getSharedPreferences("app", Context.MODE_PRIVATE);
-    isFirstOpen = preferences.getBoolean("first_open", false);
+    isFirstOpen = preferences.getBoolean("first_open", true);
 
-    if (!isFirstOpen) {
-      Intent intent = new Intent(this, WelcomeGuideActivity.class);
+    if (isFirstOpen) {
+      Intent intent = new Intent(this, AwsService.class);
+      startService(intent);
+      intent = new Intent(this, WelcomeGuideActivity.class);
       startActivity(intent);
       finish();
       return;

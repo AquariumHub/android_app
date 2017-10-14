@@ -8,7 +8,14 @@
     tools:context="net.aquariumhub.myapplication.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <RelativeLayout
+    <fragment
+        android:name="net.aquariumhub.myapplication.FragmentMain"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </fragment>
+
+    <!--RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -26,6 +33,6 @@
             android:layout_height="60dp"
             android:layout_alignParentBottom="true" />
 
-    </RelativeLayout>
+    </RelativeLayout-->
 
 </android.support.constraint.ConstraintLayout>

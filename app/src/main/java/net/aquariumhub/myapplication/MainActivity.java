@@ -5,10 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,62 +26,54 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-  /**
-   * Tag for looking for error messages in the android device monitor
-   */
-  private static final String TAG = "MainActivity";
 
-  private ViewPager mViewPager;
-  private List<Fragment> mFragments = new ArrayList<>(); // list of fragments
+  // Tag for looking for error messages in the android device monitor
+  private static final String TAG = "NavigationDrawer";
 
-  /**
-   * LinearLayout in the bottom_bar.xml
-   */
-  private LinearLayout lLayoutTabBottomHub;
-  private LinearLayout lLayoutTabBottomStatus;
-  private LinearLayout lLayoutTabBottomSetting;
-  private LinearLayout lLayoutTabBottomHistory;
-
-  /**
-   * Facebook instances
-   */
+  // Facebook instances
   private LoginManager loginManager;
   private CallbackManager callbackManager;
   private ProfileTracker profileTracker;
+
+  // ImageView socialLogin = navigationView.getHeaderView(0).findViewById(R.id.social_login);
+  ImageView userPhoto;
+  TextView userName;
+  TextView userStatus;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     drawer.addDrawerListener(toggle);
     toggle.syncState();
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    NavigationView navigationView = findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
 
-    initView(); // setup the default resources of view objects
-
     // ImageView socialLogin = (ImageView)  navigationView.getHeaderView(0).findViewById(R.id.social_login);
-    ImageView userPhoto = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.user_photo);
-    TextView userName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name);
-    TextView userstatus = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_status);
+    userPhoto = navigationView.getHeaderView(0).findViewById(R.id.user_photo);
+    userName = navigationView.getHeaderView(0).findViewById(R.id.user_name);
+    userStatus = navigationView.getHeaderView(0).findViewById(R.id.user_status);
+  }
 
-    /**
-     * Get user profile
-     */
+  private void initView(){
+
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+
+    // Get FB user profile
     if (Profile.getCurrentProfile() != null) {
       Profile profile = Profile.getCurrentProfile();
       // get the user profile picture
@@ -101,7 +88,7 @@ public class MainActivity extends AppCompatActivity
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(userPhoto);
         userName.setText(name);
-        userstatus.setText("Facebook");
+        userStatus.setText("Facebook");
         // socialLogin.setBackgroundResource(R.drawable.logout_white);
       } catch (Exception e) {
         Log.e(TAG, "Errors occurred while getting user profile: ", e);
@@ -109,121 +96,9 @@ public class MainActivity extends AppCompatActivity
     } else {
       userPhoto.setImageResource(R.mipmap.ic_launcher_round);
       userName.setText(R.string.app_name);
-      userstatus.setText("Social Website");
+      userStatus.setText("Social Website");
     }
 
-    FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-      @Override
-      public int getCount() {
-        return mFragments.size();
-      }
-
-      @Override
-      public Fragment getItem(int position) {
-        return mFragments.get(position);
-      }
-    };
-
-    mViewPager.setAdapter(mAdapter);
-    // mViewPager.setOffscreenPageLimit(2);
-    mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-      private int currentIndex;
-
-      @Override
-      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-      }
-
-      /**
-       *  Set picture of imageButton on the bottom bar while page changing
-       */
-      @Override
-      public void onPageSelected(int position) {
-
-        resetTabBtn();
-
-        switch (position) {
-          case 0:
-            ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_bottom_hub))
-                    .setImageResource(R.drawable.ic_hub_pressed);
-            ((TextView) lLayoutTabBottomHub.findViewById(R.id.tv_tab_hub))
-                    .setTextColor(getResources().getColor(R.color.skyBlue));
-            break;
-          case 1:
-            ((ImageButton) lLayoutTabBottomStatus.findViewById(R.id.iButton_tab_bottom_status))
-                    .setImageResource(R.drawable.ic_status_pressed);
-            ((TextView) lLayoutTabBottomStatus.findViewById(R.id.tv_tab_status))
-                    .setTextColor(getResources().getColor(R.color.skyBlue));
-            break;
-          case 2:
-            ((ImageButton) lLayoutTabBottomSetting.findViewById(R.id.iButton_tab_bottom_setting))
-                    .setImageResource(R.drawable.ic_setting_pressed);
-            ((TextView) lLayoutTabBottomSetting.findViewById(R.id.tv_tab_setting))
-                    .setTextColor(getResources().getColor(R.color.skyBlue));
-            break;
-          case 3:
-            ((ImageButton) lLayoutTabBottomHistory.findViewById(R.id.iButton_tab_bottom_history))
-                    .setImageResource(R.drawable.ic_history_pressed);
-            ((TextView) lLayoutTabBottomHistory.findViewById(R.id.tv_tab_history))
-                    .setTextColor(getResources().getColor(R.color.skyBlue));
-            break;
-        }
-
-        currentIndex = position;
-      }
-
-      @Override
-      public void onPageScrollStateChanged(int state) {
-
-      }
-    });
-  }
-
-  private void initView() {
-
-    lLayoutTabBottomHub = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_hub);
-    lLayoutTabBottomStatus = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_status);
-    lLayoutTabBottomSetting = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_setting);
-    lLayoutTabBottomHistory = (LinearLayout) findViewById(R.id.lLayout_tab_bottom_history);
-
-    ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_bottom_hub))
-            .setImageResource(R.drawable.ic_hub_pressed);
-    ((TextView) lLayoutTabBottomHub.findViewById(R.id.tv_tab_hub))
-            .setTextColor(getResources().getColor(R.color.skyBlue));
-
-    FragmentTabHub tabHub = new FragmentTabHub();
-    FragmentTabStatus tabStatus = new FragmentTabStatus();
-    FragmentTabSetting tabSetting = new FragmentTabSetting();
-    FragmentTabHistory tabHistory = new FragmentTabHistory();
-
-    mFragments.add(tabHub);
-    mFragments.add(tabStatus);
-    mFragments.add(tabSetting);
-    mFragments.add(tabHistory);
-  }
-
-  /**
-   * Reset the view of button on bottom bar to default
-   */
-  protected void resetTabBtn() {
-    ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_bottom_hub)).
-            setImageResource(R.drawable.ic_hub_normal);
-    ((ImageButton) lLayoutTabBottomStatus.findViewById(R.id.iButton_tab_bottom_status)).
-            setImageResource(R.drawable.ic_status_normal);
-    ((ImageButton) lLayoutTabBottomSetting.findViewById(R.id.iButton_tab_bottom_setting)).
-            setImageResource(R.drawable.ic_setting_normal);
-    ((ImageButton) lLayoutTabBottomHistory.findViewById(R.id.iButton_tab_bottom_history)).
-            setImageResource(R.drawable.ic_history_normal);
-
-    ((TextView) lLayoutTabBottomHub.findViewById(R.id.tv_tab_hub))
-            .setTextColor(getResources().getColor(R.color.normal));
-    ((TextView) lLayoutTabBottomStatus.findViewById(R.id.tv_tab_status))
-            .setTextColor(getResources().getColor(R.color.normal));
-    ((TextView) lLayoutTabBottomSetting.findViewById(R.id.tv_tab_setting))
-            .setTextColor(getResources().getColor(R.color.normal));
-    ((TextView) lLayoutTabBottomHistory.findViewById(R.id.tv_tab_history))
-            .setTextColor(getResources().getColor(R.color.normal));
   }
 
   /**
@@ -236,29 +111,10 @@ public class MainActivity extends AppCompatActivity
     popup.show();
   }
 
-  /**
-   * Change page by pressing tab button
-   */
-  public void btnHubPressed(View view) {
-    mViewPager.setCurrentItem(0, true);
-  }
-
-  public void btnStatusPressed(View view) {
-    mViewPager.setCurrentItem(1, true);
-  }
-
-  public void btnSettingPressed(View view) {
-    mViewPager.setCurrentItem(2, true);
-  }
-
-  public void btnHistoryPressed(View view) {
-    mViewPager.setCurrentItem(3, true);
-  }
-
 
   @Override
   public void onBackPressed() {
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
     } else {
@@ -282,6 +138,7 @@ public class MainActivity extends AppCompatActivity
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+      //startActivity(new Intent(getApplicationContext(), ActivitySettings.class));
       return true;
     }
 
@@ -292,23 +149,28 @@ public class MainActivity extends AppCompatActivity
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     // Handle navigation view item clicks here.
-    int id = item.getItemId();
 
-    if (id == R.id.nav_camera) {
-      // Handle the camera action
-    } else if (id == R.id.nav_gallery) {
+    switch (item.getItemId()) {
+      case R.id.nav_camera:
+        break;
 
-    } else if (id == R.id.nav_slideshow) {
+      case R.id.nav_gallery:
+        break;
 
-    } else if (id == R.id.nav_manage) {
+      case R.id.nav_manage:
+        break;
 
-    } else if (id == R.id.nav_share) {
+      case R.id.nav_share:
+        break;
 
-    } else if (id == R.id.nav_send) {
+      case R.id.nav_send:
+        break;
 
+      default:
+        break;
     }
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
   }

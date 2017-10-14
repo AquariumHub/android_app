@@ -7,23 +7,21 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/lLayout_tab_bottom_hub"
+        android:id="@+id/lLayout_tab_hub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:onClick="btnHubPressed"
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/iButton_tab_bottom_hub"
+            android:id="@+id/iButton_tab_hub"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:background="@drawable/ic_hub_normal"
             android:contentDescription="@string/title_hub"
-            android:onClick="btnHubPressed"
             android:scaleType="fitCenter" />
 
         <TextView
@@ -31,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="btnHubPressed"
             android:text="@string/title_hub"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -39,23 +36,21 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lLayout_tab_bottom_status"
+        android:id="@+id/lLayout_tab_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:onClick="btnStatusPressed"
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/iButton_tab_bottom_status"
+            android:id="@+id/iButton_tab_status"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:background="@drawable/ic_status_normal"
             android:contentDescription="@string/title_status"
-            android:onClick="btnStatusPressed"
             android:scaleType="fitCenter" />
 
         <TextView
@@ -63,7 +58,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="btnStatusPressed"
             android:text="@string/title_status"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -71,16 +65,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lLayout_tab_bottom_setting"
+        android:id="@+id/lLayout_tab_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:onClick="btnSettingPressed"
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/iButton_tab_bottom_setting"
+            android:id="@+id/iButton_tab_setting"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
@@ -88,7 +81,6 @@
             android:adjustViewBounds="true"
             android:background="@drawable/ic_setting_normal"
             android:contentDescription="@string/title_setting"
-            android:onClick="btnSettingPressed"
             android:scaleType="fitCenter" />
 
         <TextView
@@ -96,7 +88,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="btnSettingPressed"
             android:text="@string/title_setting"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -104,23 +95,21 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lLayout_tab_bottom_history"
+        android:id="@+id/lLayout_tab_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:onClick="btnHistoryPressed"
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/iButton_tab_bottom_history"
+            android:id="@+id/iButton_tab_history"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:background="@drawable/ic_history_normal"
             android:contentDescription="@string/title_history"
-            android:onClick="btnHistoryPressed"
             android:scaleType="fitCenter" />
 
         <TextView
@@ -128,7 +117,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="btnHistoryPressed"
             android:text="@string/title_history"
             android:textSize="14sp"
             android:textStyle="bold" />
