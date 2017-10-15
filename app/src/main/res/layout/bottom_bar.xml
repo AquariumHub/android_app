@@ -16,11 +16,12 @@
 
         <ImageButton
             android:id="@+id/iButton_tab_hub"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_marginTop="3dp"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:background="@drawable/ic_hub_normal"
+            android:background="@drawable/ic_aquarium_normal"
             android:contentDescription="@string/title_hub"
             android:scaleType="fitCenter" />
 

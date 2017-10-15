@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Printer;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
   // Tag for looking for error messages in the android device monitor
-  private static final String TAG = "NavigationDrawer";
+  private static final String TAG = "MainActivity";
 
   // Facebook instances
   private LoginManager loginManager;
@@ -42,10 +46,19 @@ public class MainActivity extends AppCompatActivity
   TextView userName;
   TextView userStatus;
 
+  FragmentManager fragmentManager;
+  FragmentMain fragmentMain;
+  FragmentSelectDevice fragmentSelectDevice;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentMain = new FragmentMain();
+    fragmentTransaction.add(R.id.container_main, fragmentMain).commit();
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -63,10 +76,6 @@ public class MainActivity extends AppCompatActivity
     userPhoto = navigationView.getHeaderView(0).findViewById(R.id.user_photo);
     userName = navigationView.getHeaderView(0).findViewById(R.id.user_name);
     userStatus = navigationView.getHeaderView(0).findViewById(R.id.user_status);
-  }
-
-  private void initView(){
-
   }
 
   @Override
@@ -145,16 +154,36 @@ public class MainActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
+  private int currentPage;
+
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     // Handle navigation view item clicks here.
+    Log.d(TAG, "onNavigationItemSelected");
+
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    hideFragments(fragmentTransaction);
 
     switch (item.getItemId()) {
-      case R.id.nav_camera:
+      case R.id.nav_aquarium:
+        Log.d(TAG, "nav_aquarium");
+        if (fragmentMain == null) {
+          fragmentMain = new FragmentMain();
+          fragmentTransaction.add(R.id.container_main, fragmentMain);
+        } else {
+          fragmentTransaction.show(fragmentMain);
+        }
         break;
 
-      case R.id.nav_gallery:
+      case R.id.nav_select_device:
+        Log.d(TAG, "nav_select_device");
+        if (fragmentSelectDevice == null) {
+          fragmentSelectDevice = new FragmentSelectDevice();
+          fragmentTransaction.add(R.id.container_main, fragmentSelectDevice);
+        } else {
+          fragmentTransaction.show(fragmentSelectDevice);
+        }
         break;
 
       case R.id.nav_manage:
@@ -170,9 +199,22 @@ public class MainActivity extends AppCompatActivity
         break;
     }
 
+    fragmentTransaction.commit();
+
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
+  }
+
+  private void hideFragments(FragmentTransaction fragmentTransaction) {
+
+    if (fragmentMain != null) {
+      fragmentTransaction.hide(fragmentMain);
+    }
+    if (fragmentSelectDevice != null) {
+      fragmentTransaction.hide(fragmentSelectDevice);
+    }
+
   }
 
   public void enterSocialLoginActivity(View v) {

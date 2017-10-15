@@ -8,12 +8,11 @@
     tools:context="net.aquariumhub.myapplication.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <fragment
-        android:name="net.aquariumhub.myapplication.FragmentMain"
-        android:id="@+id/main_content"
+    <RelativeLayout
+        android:id="@+id/container_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </fragment>
+    </RelativeLayout>
 
     <!--RelativeLayout
         android:layout_width="match_parent"

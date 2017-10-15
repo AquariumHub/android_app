@@ -71,7 +71,7 @@ public class FragmentMain extends Fragment implements View.OnClickListener {
         switch (position) {
           case 0:
             ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_hub))
-                    .setImageResource(R.drawable.ic_hub_pressed);
+                    .setImageResource(R.drawable.ic_aquarium_pressed);
             ((TextView) lLayoutTabBottomHub.findViewById(R.id.tv_tab_hub))
                     .setTextColor(getResources().getColor(R.color.skyBlue));
             break;
@@ -115,13 +115,17 @@ public class FragmentMain extends Fragment implements View.OnClickListener {
     ImageButton iButtonTabSetting = getView().findViewById(R.id.iButton_tab_setting);
     ImageButton iButtonTabHistory = getView().findViewById(R.id.iButton_tab_history);
 
+    lLayoutTabBottomHub.setOnClickListener(this);
+    lLayoutTabBottomStatus.setOnClickListener(this);
+    lLayoutTabBottomSetting.setOnClickListener(this);
+    lLayoutTabBottomHistory.setOnClickListener(this);
     iButtonTabHub.setOnClickListener(this);
     iButtonTabStatus.setOnClickListener(this);
     iButtonTabSetting.setOnClickListener(this);
     iButtonTabHistory.setOnClickListener(this);
 
     ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_hub))
-            .setImageResource(R.drawable.ic_hub_pressed);
+            .setImageResource(R.drawable.ic_aquarium_pressed);
     ((TextView) lLayoutTabBottomHub.findViewById(R.id.tv_tab_hub))
             .setTextColor(getResources().getColor(R.color.skyBlue));
 
@@ -139,7 +143,7 @@ public class FragmentMain extends Fragment implements View.OnClickListener {
   // Reset the view of button on bottom bar to default
   protected void resetTabBtn() {
     ((ImageButton) lLayoutTabBottomHub.findViewById(R.id.iButton_tab_hub)).
-            setImageResource(R.drawable.ic_hub_normal);
+            setImageResource(R.drawable.ic_aquarium_normal);
     ((ImageButton) lLayoutTabBottomStatus.findViewById(R.id.iButton_tab_status)).
             setImageResource(R.drawable.ic_status_normal);
     ((ImageButton) lLayoutTabBottomSetting.findViewById(R.id.iButton_tab_setting)).
@@ -162,21 +166,25 @@ public class FragmentMain extends Fragment implements View.OnClickListener {
   public void onClick(View view) {
     switch (view.getId()) {
 
+      case R.id.lLayout_tab_hub:
       case R.id.iButton_tab_hub:
       case R.id.tv_tab_hub:
         mViewPager.setCurrentItem(0, true);
         break;
 
+      case R.id.lLayout_tab_status:
       case R.id.iButton_tab_status:
       case R.id.tv_tab_status:
         mViewPager.setCurrentItem(1, true);
         break;
 
+      case R.id.lLayout_tab_setting:
       case R.id.iButton_tab_setting:
       case R.id.tv_tab_setting:
         mViewPager.setCurrentItem(2, true);
         break;
 
+      case R.id.lLayout_tab_history:
       case R.id.iButton_tab_history:
       case R.id.tv_tab_history:
         mViewPager.setCurrentItem(3, true);
