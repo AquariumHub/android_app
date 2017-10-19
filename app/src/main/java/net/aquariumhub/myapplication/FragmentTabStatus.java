@@ -14,11 +14,9 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import com.amazonaws.mobileconnectors.iot.AWSIotMqttClientStatusCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttNewMessageCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -134,5 +134,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_setting">Settings</string>
 
 </resources>

@@ -1,160 +1,483 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context="net.aquariumhub.myapplication.ActivityTimeRangePick"
+    tools:layout_editor_absoluteY="81dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="@string/client_id" />
-
-        <TextView
-            android:id="@+id/tvClientId"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cLayout_setting_temp"
+        android:layout_width="0dp"
+        android:layout_height="106dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/stretch_background"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setting_title"
+        tools:ignore="MissingConstraints">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="@string/status" />
-
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical"
-            android:text="@string/disconnected" />
-    </LinearLayout>
-
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnConnect"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="6"
-            android:text="@string/connect" />
-
-        <Button
-            android:id="@+id/btnDisconnect"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_weight="4"
-            android:text="@string/disconnect" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/txtSubcribe"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical"
-            android:hint="@string/topic_name" />
-
-        <Button
-            android:id="@+id/btnSubscribe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/subscribe" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical|top"
-            android:text="@string/last_message" />
-
-        <TextView
-            android:id="@+id/tvLastMessage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical|top"
-            android:text="@string/NA" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
+            android:id="@+id/setting_temp_title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="@string/topic" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="溫度"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/txtTopic"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center_vertical"
-            android:inputType="text" />
-    </LinearLayout>
+        <TextView
+            android:id="@+id/setting_temp_upperbound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="上限: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_temp_title" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/setting_temp_upperValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_temp_upperbound"
+            app:layout_constraintStart_toEndOf="@+id/setting_temp_upperbound"
+            app:layout_constraintTop_toTopOf="@+id/setting_temp_upperbound"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/setting_temp_lowerBound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="下限: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_temp_upperbound" />
+
+        <TextView
+            android:id="@+id/setting_temp_lowerValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_temp_lowerBound"
+            app:layout_constraintStart_toEndOf="@+id/setting_temp_lowerBound"
+            app:layout_constraintTop_toTopOf="@+id/setting_temp_lowerBound"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/setting_edit_temp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="4dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50364965" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="106dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/stretch_background"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cLayout_setting_temp"
+        app:layout_constraintTop_toBottomOf="@+id/setting_title"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton
+            android:id="@+id/setting_edit_bright"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="4dp" />
+
+        <TextView
+            android:id="@+id/setting_bright_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="亮度"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/setting_bright_upperBound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="上限: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_bright_title" />
+
+        <TextView
+            android:id="@+id/setting_bright_upperValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_bright_upperBound"
+            app:layout_constraintStart_toEndOf="@+id/setting_bright_upperBound"
+            app:layout_constraintTop_toTopOf="@+id/setting_bright_upperBound"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_bright_lowerBound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="下限: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_bright_upperBound" />
+
+        <TextView
+            android:id="@+id/setting_bright_lowerValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_bright_lowerBound"
+            app:layout_constraintStart_toEndOf="@+id/setting_bright_lowerBound"
+            app:layout_constraintTop_toTopOf="@+id/setting_bright_lowerBound"
+            app:layout_constraintVertical_bias="0.75" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cLayout_setting_frequency"
+        android:layout_width="0dp"
+        android:layout_height="106dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/stretch_background"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cLayout_setting_temp"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton
+            android:id="@+id/setting_edit_frequency"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="4dp" />
+
+        <TextView
+            android:id="@+id/setting_frequency_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="光頻"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/setting_frequency_upperbound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="上限: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_frequency_title" />
+
+        <TextView
+            android:id="@+id/setting_frequency_upperValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_frequency_upperbound"
+            app:layout_constraintStart_toEndOf="@+id/setting_frequency_upperbound"
+            app:layout_constraintTop_toTopOf="@+id/setting_frequency_upperbound"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/setting_frequency_lowerBound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="下限: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_frequency_upperbound" />
+
+        <TextView
+            android:id="@+id/setting_frequency_lowerValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_frequency_lowerBound"
+            app:layout_constraintStart_toEndOf="@+id/setting_frequency_lowerBound"
+            app:layout_constraintTop_toTopOf="@+id/setting_frequency_lowerBound"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/setting_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Rules"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cLayout_setting_status"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/stretch_background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cLayout_setting_frequency"
+        tools:ignore="MissingConstraints">
 
         <TextView
+            android:id="@+id/setting_status_title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/message" />
+            android:layout_height="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="累積資料"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/txtMessage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:inputType="text" />
-    </LinearLayout>
+        <TextView
+            android:id="@+id/setting_status_avaTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="平均溫度: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_status_title" />
 
-    <Button
-        android:id="@+id/btnPublish"
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/setting_status_value_avaTemp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_avaTemp"
+            app:layout_constraintEnd_toStartOf="@+id/setting_status_topTemp"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_avaTemp"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_avaTemp"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_status_topTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="56dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="8dp"
+            android:text="最高溫度: "
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_avaTemp"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_avaTemp"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_avaTemp"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_status_value_topTemp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_topTemp"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_topTemp"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_topTemp"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_status_avaBright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="平均亮度: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_status_avaTemp" />
+
+        <TextView
+            android:id="@+id/setting_status_value_avaBright"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_avaBright"
+            app:layout_constraintEnd_toStartOf="@+id/textView25"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_avaBright"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_avaBright"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="56dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="8dp"
+            android:text="最高亮度: "
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_avaBright"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_avaBright"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_avaBright"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_status_value_topBright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/textView25"
+            app:layout_constraintStart_toEndOf="@+id/textView25"
+            app:layout_constraintTop_toTopOf="@+id/textView25"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_status_avaFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="平均光頻: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setting_status_avaBright"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/setting_status_value_avaFrequency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_avaFrequency"
+            app:layout_constraintEnd_toStartOf="@+id/setting_status_topFrequency"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_avaFrequency"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_avaFrequency"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/setting_status_value_topFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_topFrequency"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_topFrequency"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_topFrequency"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginLeft="4dp" />
+
+        <TextView
+            android:id="@+id/setting_status_topFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="8dp"
+            android:text="最高光頻: "
+            app:layout_constraintBottom_toBottomOf="@+id/setting_status_avaFrequency"
+            app:layout_constraintStart_toEndOf="@+id/setting_status_avaFrequency"
+            app:layout_constraintTop_toTopOf="@+id/setting_status_avaFrequency"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginLeft="56dp" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:text="@string/publish" />
-</LinearLayout>
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+</android.support.constraint.ConstraintLayout>

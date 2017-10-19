@@ -5,19 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Printer;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,7 +37,7 @@ public class MainActivity extends AppCompatActivity
   private CallbackManager callbackManager;
   private ProfileTracker profileTracker;
 
-  // ImageView socialLogin = navigationView.getHeaderView(0).findViewById(R.id.social_login);
+  // Views for user profiles
   ImageView userPhoto;
   TextView userName;
   TextView userStatus;
@@ -55,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // Add fragment to container in content.xml
     fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentMain = new FragmentMain();
@@ -85,6 +82,7 @@ public class MainActivity extends AppCompatActivity
     // Get FB user profile
     if (Profile.getCurrentProfile() != null) {
       Profile profile = Profile.getCurrentProfile();
+
       // get the user profile picture
       Uri uri_userPhoto = profile.getProfilePictureUri(300, 300);
       String id = profile.getId();
@@ -92,6 +90,7 @@ public class MainActivity extends AppCompatActivity
       Log.d(TAG, "Facebook userPhoto: " + uri_userPhoto);
       Log.d(TAG, "Facebook id: " + id);
       Log.d(TAG, "Facebook name: " + name);
+
       try {
         Glide.with(this).load(uri_userPhoto)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -109,17 +108,6 @@ public class MainActivity extends AppCompatActivity
     }
 
   }
-
-  /**
-   * Press title button to show the popup menu on the title bar
-   */
-  public void showPopup(View v) {
-    PopupMenu popup = new PopupMenu(this, v);
-    MenuInflater inflater = popup.getMenuInflater();
-    inflater.inflate(R.menu.menu_top_right, popup.getMenu());
-    popup.show();
-  }
-
 
   @Override
   public void onBackPressed() {
@@ -147,14 +135,12 @@ public class MainActivity extends AppCompatActivity
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
-      //startActivity(new Intent(getApplicationContext(), ActivitySettings.class));
+      startActivity(new Intent(getApplicationContext(), ActivitySettings.class));
       return true;
     }
 
     return super.onOptionsItemSelected(item);
   }
-
-  private int currentPage;
 
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
@@ -167,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
     switch (item.getItemId()) {
       case R.id.nav_aquarium:
-        Log.d(TAG, "nav_aquarium");
+        Log.d(TAG, "click nav_aquarium");
         if (fragmentMain == null) {
           fragmentMain = new FragmentMain();
           fragmentTransaction.add(R.id.container_main, fragmentMain);
@@ -177,7 +163,7 @@ public class MainActivity extends AppCompatActivity
         break;
 
       case R.id.nav_select_device:
-        Log.d(TAG, "nav_select_device");
+        Log.d(TAG, "click nav_select_device");
         if (fragmentSelectDevice == null) {
           fragmentSelectDevice = new FragmentSelectDevice();
           fragmentTransaction.add(R.id.container_main, fragmentSelectDevice);
@@ -214,7 +200,6 @@ public class MainActivity extends AppCompatActivity
     if (fragmentSelectDevice != null) {
       fragmentTransaction.hide(fragmentSelectDevice);
     }
-
   }
 
   public void enterSocialLoginActivity(View v) {
@@ -225,8 +210,8 @@ public class MainActivity extends AppCompatActivity
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    // if you don't add following block,
-    // your registered `FacebookCallback` won't be called
+    /* if you don't add following block,
+     * your registered `FacebookCallback` won't be called */
     callbackManager.onActivityResult(requestCode, resultCode, data);
   }
 }
