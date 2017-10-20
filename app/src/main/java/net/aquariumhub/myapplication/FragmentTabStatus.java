@@ -37,12 +37,12 @@ public class FragmentTabStatus extends Fragment {
   private AwsService myService;
   boolean mBounded;
 
-  TextView tvHubTemperature;
-  TextView tvHubBrightness;
-  TextView tvHubLightFrequency;
+  TextView tvValueTemperature;
+  TextView tvValueBrightness;
+  TextView tvValueLightFrequency;
 
   WebView wvGaugeTemperature;
-  final String URL_GRAPH = "http://ec2-13-115-112-36.ap-northeast-1.compute.amazonaws.com/gauge/temperature.php?lowerBound=10&upperBound=90";
+  String URL_GRAPH = "http://ec2-13-115-112-36.ap-northeast-1.compute.amazonaws.com/gauge/temperature.php?lowerBound=10&upperBound=90";
 
   ServiceConnection serviceConnection = new ServiceConnection() {
     @Override
@@ -70,13 +70,13 @@ public class FragmentTabStatus extends Fragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
 
-    tvHubTemperature = (TextView) view.findViewById(R.id.tv_hub_temperature);
-    tvHubBrightness = (TextView) view.findViewById(R.id.tv_hub_brightness);
-    tvHubLightFrequency = (TextView) view.findViewById(R.id.tv_hub_lightFrequency);
+    tvValueTemperature = (TextView) view.findViewById(R.id.tv_value_temperature);
+    tvValueBrightness = (TextView) view.findViewById(R.id.tv_value_brightness);
+    tvValueLightFrequency = (TextView) view.findViewById(R.id.tv_value_lightFrequency);
 
-    tvHubTemperature.setText(String.format(getString(R.string.hub_temperature), "0"));
-    tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), "0"));
-    tvHubLightFrequency.setText(String.format(getString(R.string.hub_lightFrequency), "0"));
+    tvValueTemperature.setText(getString(R.string.value_temperature, "0"));
+    tvValueBrightness.setText(getString(R.string.value_brightness, "0"));
+    tvValueLightFrequency.setText(getString(R.string.value_lightFrequency, "0"));
 
     wvGaugeTemperature = (WebView) getActivity().findViewById(R.id.wv_gauge_graph);
     wvGaugeTemperature.getSettings().setJavaScriptEnabled(true);
@@ -97,56 +97,58 @@ public class FragmentTabStatus extends Fragment {
   public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
     if (isVisibleToUser) {
-
-      Intent myIntent = new Intent(getActivity(), AwsService.class);
-      getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
-
-      try {
-
-        wvGaugeTemperature.loadUrl(URL_GRAPH);
-
-        final String topic = "sensingData";
-        myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
-                new AWSIotMqttNewMessageCallback() {
-
-                  @Override
-                  public void onMessageArrived(final String topic, final byte[] data) {
-
-                    getActivity().runOnUiThread(new Runnable() {
-
-                      @Override
-                      public void run() {
-
-                        try {
-                          String message = new String(data, "UTF-8");
-                          JSONObject mJsonObject = new JSONObject(message);
-
-                          Log.d(LOG_TAG, "Message arrived:");
-                          Log.d(LOG_TAG, "Topic: " + topic);
-                          Log.d(LOG_TAG, "Temperature: " + mJsonObject.getString("temperature") +
-                                  "\nBrightness: " + mJsonObject.getString("brightness") +
-                                  "\nLightFrequency: " + mJsonObject.getString("lightFrequency") +
-                                  "\n---------------------------------");
-
-                          tvHubTemperature.setText(String.format(getString(R.string.hub_temperature), mJsonObject.getString("temperature")));
-                          tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), mJsonObject.getString("brightness")));
-                          tvHubLightFrequency.setText(String.format(getString(R.string.hub_lightFrequency), mJsonObject.getString("lightFrequency")));
-
-                        } catch (UnsupportedEncodingException e) {
-                          Log.e(LOG_TAG, "Message encoding error.", e);
-                        } catch (JSONException e) {
-                          e.printStackTrace();
-                        }
-                      }
-                    });
-                  }
-                });
-      } catch (Exception e) {
-        Log.e(LOG_TAG, "Subscription error.", e);
-      }
-
+      subscribeToTopic();
     } else {
       // fragment is no longer visible
+    }
+  }
+
+  public void subscribeToTopic(){
+    Intent myIntent = new Intent(getActivity(), AwsService.class);
+    getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
+
+    try {
+
+      wvGaugeTemperature.loadUrl(URL_GRAPH);
+
+      final String topic = "sensingData";
+      myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
+              new AWSIotMqttNewMessageCallback() {
+
+                @Override
+                public void onMessageArrived(final String topic, final byte[] data) {
+
+                  getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                      try {
+                        String message = new String(data, "UTF-8");
+                        JSONObject mJsonObject = new JSONObject(message);
+
+                        Log.d(LOG_TAG, "Message arrived:");
+                        Log.d(LOG_TAG, "Topic: " + topic);
+                        Log.d(LOG_TAG, "Temperature: " + mJsonObject.getString("temperature") +
+                                "\nBrightness: " + mJsonObject.getString("brightness") +
+                                "\nLightFrequency: " + mJsonObject.getString("lightFrequency") +
+                                "\n---------------------------------");
+
+                        tvValueTemperature.setText(getString(R.string.value_temperature, mJsonObject.getString("temperature")));
+                        tvValueBrightness.setText(getString(R.string.value_brightness, mJsonObject.getString("brightness")));
+                        tvValueLightFrequency.setText(getString(R.string.value_lightFrequency, mJsonObject.getString("lightFrequency")));
+
+                      } catch (UnsupportedEncodingException e) {
+                        Log.e(LOG_TAG, "Message encoding error.", e);
+                      } catch (JSONException e) {
+                        e.printStackTrace();
+                      }
+                    }
+                  });
+                }
+              });
+    } catch (Exception e) {
+      Log.e(LOG_TAG, "Subscription error.", e);
     }
   }
 
