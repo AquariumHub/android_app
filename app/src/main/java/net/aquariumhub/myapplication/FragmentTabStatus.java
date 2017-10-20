@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -39,6 +40,9 @@ public class FragmentTabStatus extends Fragment {
   TextView tvHubTemperature;
   TextView tvHubBrightness;
   TextView tvHubLightFrequency;
+
+  WebView wvGaugeTemperature;
+  final String URL_GRAPH = "http://ec2-13-115-112-36.ap-northeast-1.compute.amazonaws.com/gauge/temperature.php?lowerBound=10&upperBound=90";
 
   ServiceConnection serviceConnection = new ServiceConnection() {
     @Override
@@ -74,11 +78,18 @@ public class FragmentTabStatus extends Fragment {
     tvHubBrightness.setText(String.format(getString(R.string.hub_brightness), "0"));
     tvHubLightFrequency.setText(String.format(getString(R.string.hub_lightFrequency), "0"));
 
-    String URL_GAUGE_GRAPH = "http://192.168.1.103/test/gauge.html";
+    wvGaugeTemperature = (WebView) getActivity().findViewById(R.id.wv_gauge_graph);
+    wvGaugeTemperature.getSettings().setJavaScriptEnabled(true);
 
-    WebView mWebVIew = (WebView) getActivity().findViewById(R.id.wv_gauge_graph);
-    mWebVIew.getSettings().setJavaScriptEnabled(true);
-    mWebVIew.loadUrl(URL_GAUGE_GRAPH);
+    wvGaugeTemperature.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View view, MotionEvent motionEvent) {
+        return motionEvent.getAction() == MotionEvent.ACTION_MOVE;
+      }
+    });
+
+    wvGaugeTemperature.setVerticalScrollBarEnabled(false);
+    wvGaugeTemperature.setHorizontalScrollBarEnabled(false);
 
   }
 
@@ -91,6 +102,9 @@ public class FragmentTabStatus extends Fragment {
       getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
 
       try {
+
+        wvGaugeTemperature.loadUrl(URL_GRAPH);
+
         final String topic = "sensingData";
         myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
                 new AWSIotMqttNewMessageCallback() {
