@@ -1,12 +1,16 @@
 package net.aquariumhub.myapplication;
 
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +30,20 @@ import java.io.IOException;
 import java.net.URI;
 
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 
 import static android.content.Context.BIND_AUTO_CREATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FragmentTabHub extends Fragment {
 
@@ -44,6 +60,11 @@ public class FragmentTabHub extends Fragment {
   TextView tvA360Intensity;
   TextView tvA360Color;
 
+  private LoginManager loginManager;
+  private CallbackManager callbackManager;
+  private ProfileTracker profileTracker;
+  ShareDialog shareDialog;
+
   // final String URL_VIDEO = "http://mylinkit.local:8080/?action=stream";
   // final String URL_VIDEO = "http://13.115.112.36:4443/?action=stream";
   // final String URL_VIDEO = "http://aquarium-hub.tunnel.qydev.com/?action=stream";
@@ -58,6 +79,10 @@ public class FragmentTabHub extends Fragment {
 
   Switch aSwitchLiveStream;
   ImageView imageViewLiveStream;
+
+  ShareButton shareButton;
+  Bitmap image;
+  int counter = 0;
 
   ServiceConnection serviceConnection = new ServiceConnection() {
     @Override
@@ -81,8 +106,41 @@ public class FragmentTabHub extends Fragment {
     return inflater.inflate(R.layout.tab_hub, container, false);
   }
 
+  SharePhotoContent content;
+
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
+
+    callbackManager = CallbackManager.Factory.create();
+    shareDialog = new ShareDialog(this);
+    // this part is optional
+    shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+      @Override
+      public void onSuccess(Sharer.Result result) {
+
+      }
+
+      @Override
+      public void onCancel() {
+
+      }
+
+      @Override
+      public void onError(FacebookException error) {
+
+      }
+    });
+
+    SharePhoto photo = new SharePhoto.Builder()
+            .setBitmap(image)
+            .build();
+    content = new SharePhotoContent.Builder()
+            .addPhoto(photo)
+            .build();
+
+    //shareButton = (ShareButton)getActivity().findViewById(R.id.fb_share_button);
+    shareButton.setShareContent(content);
+    shareButton.setOnClickListener(shareButtonClicked);
 
     seekbarAP700Intensity = (SeekBar) getActivity().findViewById(R.id.bar_ap700_intensity);
     seekbarAP700Intensity.setOnSeekBarChangeListener(seekbarAP700IntensityChange);
@@ -109,6 +167,14 @@ public class FragmentTabHub extends Fragment {
     new DoRead().execute(URL_VIDEO);
   }
 
+  ShareButton.OnClickListener shareButtonClicked = new ShareButton.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      image = getScreenShot();
+      shareDialog.show(content);
+    }
+  };
+
   @Override
   public void onStart() {
     super.onStart();
@@ -124,6 +190,36 @@ public class FragmentTabHub extends Fragment {
       getActivity().unbindService(serviceConnection);
       mBounded = false;
     }
+  }
+
+  @Override
+  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    callbackManager.onActivityResult(requestCode, resultCode, data);
+  }
+
+  private Bitmap getScreenShot() {
+    //藉由View來Cache全螢幕畫面後放入Bitmap
+    View mView = getActivity().getWindow().getDecorView();
+    mView.setDrawingCacheEnabled(true);
+    mView.buildDrawingCache();
+    Bitmap mFullBitmap = mView.getDrawingCache();
+
+    //取得系統狀態列高度
+    Rect mRect = new Rect();
+    getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(mRect);
+    int mStatusBarHeight = mRect.top;
+
+    //取得手機螢幕長寬尺寸
+    int mPhoneWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+    int mPhoneHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
+
+    //將狀態列的部分移除並建立新的Bitmap
+    Bitmap mBitmap = Bitmap.createBitmap(mFullBitmap, 0, mStatusBarHeight, mPhoneWidth, mPhoneHeight - mStatusBarHeight);
+    //將Cache的畫面清除
+    mView.destroyDrawingCache();
+
+    return mBitmap;
   }
 
   private boolean isVisible = false;
