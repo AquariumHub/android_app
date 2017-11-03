@@ -1,28 +1,24 @@
 package net.aquariumhub.myapplication;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 
 import java.util.Calendar;
 
-public class FragmentTabSetting extends Fragment implements com.borax12.materialdaterangepicker.time.TimePickerDialog.OnTimeSetListener, com.borax12.materialdaterangepicker.date.DatePickerDialog.OnDateSetListener {
+public class FragmentTabSetting extends Fragment {
 
-
-  Calendar now = Calendar.getInstance();
-
-  com.borax12.materialdaterangepicker.date.DatePickerDialog dpd = com.borax12.materialdaterangepicker.date.DatePickerDialog.newInstance(
-          FragmentTabSetting.this,
-          now.get(Calendar.YEAR),
-          now.get(Calendar.MONTH),
-          now.get(Calendar.DAY_OF_MONTH));
-
-  TextView tv_time;
+  ImageButton setting_edit_temp;
+  ImageButton setting_edit_bright;
+  ImageButton setting_edit_frequency;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,28 +27,87 @@ public class FragmentTabSetting extends Fragment implements com.borax12.material
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
-
     super.onViewCreated(view, savedInstanceState);
 
-    // dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+    setting_edit_temp = getActivity().findViewById(R.id.setting_edit_temp);
+    setting_edit_bright = getActivity().findViewById(R.id.setting_edit_bright);
+    setting_edit_frequency = getActivity().findViewById(R.id.setting_edit_frequency);
+
+    setting_edit_temp.setOnClickListener(setting_edit_temp_clicked);
+    setting_edit_bright.setOnClickListener(setting_edit_bright_clicked);
+    setting_edit_frequency.setOnClickListener(setting_edit_frequency_clicked);
   }
 
+  ImageButton.OnClickListener setting_edit_temp_clicked = new ImageButton.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      //產生視窗物件
+      new AlertDialog.Builder(getActivity())
+              .setTitle("Setting Temp Alert")//設定視窗標題
+              .setView(R.layout.dialog_temp_rule)
+              // set the action buttons
+              .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  dialog.cancel();
+                }
+              })
+              .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  dialog.cancel();
+                }
+              })
+              .show();//呈現對話視窗
+    }
+  };
 
-  @Override
-  public void onDateSet(com.borax12.materialdaterangepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+  ImageButton.OnClickListener setting_edit_bright_clicked = new ImageButton.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      //產生視窗物件
+      new AlertDialog.Builder(getActivity())
+              .setTitle("Setting Temp Alert")//設定視窗標題
+              .setView(R.layout.dialog_bright_rule)
+              // set the action buttons
+              .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  dialog.cancel();
+                }
+              })
+              .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  dialog.cancel();
+                }
+              })
+              .show();//呈現對話視窗
+    }
+  };
 
-    String time = "You picked the following time: From ";
-
-  }
-
-  @Override
-  public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-    String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
-    String minuteString = minute < 10 ? "0"+minute : ""+minute;
-    String hourStringEnd = hourOfDayEnd < 10 ? "0"+hourOfDayEnd : ""+hourOfDayEnd;
-    String minuteStringEnd = minuteEnd < 10 ? "0"+minuteEnd : ""+minuteEnd;
-    String time = "You picked the following time: From - "+hourString+"h"+minuteString+" To - "+hourStringEnd+"h"+minuteStringEnd;
-
-  }
+  ImageButton.OnClickListener setting_edit_frequency_clicked = new ImageButton.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      //產生視窗物件
+      new AlertDialog.Builder(getActivity())
+              .setTitle("Setting Temp Alert")//設定視窗標題
+              .setView(R.layout.dialog_freq_rule)
+              // set the action buttons
+              .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  dialog.cancel();
+                }
+              })
+              .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  dialog.cancel();
+                }
+              })
+              .show();//呈現對話視窗
+    }
+  };
 
 }
