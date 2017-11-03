@@ -43,8 +43,11 @@ public class FragmentTabHub extends Fragment {
   TextView tvAp700Color;
   TextView tvA360Intensity;
   TextView tvA360Color;
-  /*http://aquarium-hub.tunnel.qydev.com/?action=stream http://13.115.112.36:4443/?action=stream*/
-  final String URL_VIDEO = "http://aquariumhub.ngrok.cc/?action=stream";
+
+  // final String URL_VIDEO = "http://mylinkit.local:8080/?action=stream";
+  // final String URL_VIDEO = "http://13.115.112.36:4443/?action=stream";
+  // final String URL_VIDEO = "http://aquarium-hub.tunnel.qydev.com/?action=stream";
+  final String URL_VIDEO = "http://aquariumhub.free.ngrok.cc/?action=stream";
   MjpegView mMjpegView;
   // boolean flag_liveStream = true;
 
@@ -178,6 +181,8 @@ public class FragmentTabHub extends Fragment {
       if (!aSwitchLiveStream.isChecked() || !isVisible) {
         Log.d(TAG, "switch of live stream is not checked");
         mMjpegView.stopPlayback();
+      } else {
+        Log.d(TAG, "switch of live stream is checked");
       }
       if (responseStatusCode == 404) {
         imageViewLiveStream.setVisibility(View.VISIBLE);
