@@ -13,13 +13,14 @@
         android:layout_marginLeft="8dp">
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/checkBox_temp_upperBound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="No upper bound" />
 
         <CheckBox
+            android:id="@+id/checkBox_temp_lowerBound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

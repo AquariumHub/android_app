@@ -114,7 +114,6 @@ public class FragmentTabHub extends Fragment {
     super.onStart();
     Intent myIntent = new Intent(getActivity(), AwsService.class);
     getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
-
   }
 
   @Override

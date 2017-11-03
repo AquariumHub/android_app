@@ -1,11 +1,16 @@
 package net.aquariumhub.myapplication;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -14,6 +19,7 @@ import com.amazonaws.mobileconnectors.iot.AWSIotKeystoreHelper;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttClientStatusCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttLastWillAndTestament;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttManager;
+import com.amazonaws.mobileconnectors.iot.AWSIotMqttNewMessageCallback;
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -22,11 +28,27 @@ import com.amazonaws.services.iot.model.AttachPrincipalPolicyRequest;
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateRequest;
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.util.UUID;
 
 public class AwsService extends Service {
+  public int tempUpperBound = 100;
+  public int tempLowerBound = 0;
+  public int brightUpperBound = 1000;
+  public int brightLowerBound = 0;
+  public int freqUpperBound = 100000;
+  public int freqLowerBound = 0;
+
+  private Intent intent;
+  private static final int NOTIFICATION_ID = 0;
+  private NotificationManager notificationManger;
+  private Notification notification;
+
   /**
    * Tag for looking for error messages in the android device monitor
    */
@@ -241,6 +263,7 @@ public class AwsService extends Service {
                 } else if (status == AWSIotMqttClientStatus.Connected) {
                   currentStatus = getString(R.string.connected);
                   tvStatus.setText(getString(R.string.connected));
+                  //subscribeToTopic();
                 } else if (status == AWSIotMqttClientStatus.Reconnecting) {
                   if (throwable != null) {
                     Log.e(LOG_TAG, "Connection error.", throwable);
@@ -265,6 +288,143 @@ public class AwsService extends Service {
       Log.e(LOG_TAG, "Connection error.", e);
       currentStatus = getString(R.string.error_message, e.getMessage());
       tvStatus.setText(getString(R.string.error_message, e.getMessage()));
+    }
+  }
+
+  boolean isFirstTempNotification = true;
+  boolean isFirstBrightNotification = true;
+  boolean isFirstFreqNotification = true;
+  int countTemp = 0;
+  int countBright = 0;
+  int countFreq = 0;
+
+  public void subscribeToTopic() {
+    try {
+      final String topic = "sensingData";
+      mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
+              new AWSIotMqttNewMessageCallback() {
+                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                @Override
+                public void onMessageArrived(final String topic, final byte[] data) {
+                  countTemp++;
+                  countBright++;
+                  countFreq++;
+                  try {
+                    String message = new String(data, "UTF-8");
+                    JSONObject mJsonObject = new JSONObject(message);
+
+                    Log.d(LOG_TAG, "Message arrived:");
+                    Log.d(LOG_TAG, "Topic: " + topic);
+                    Log.d(LOG_TAG, "Temperature: " + mJsonObject.getString("temperature") +
+                            "\nBrightness: " + mJsonObject.getString("brightness") +
+                            "\nLightFrequency: " + mJsonObject.getString("lightFrequency") +
+                            "\n---------------------------------");
+
+                    float iTempValue = Float.parseFloat(mJsonObject.getString("temperature"));
+                    int iBrightValue = Integer.parseInt(mJsonObject.getString("brightness"));
+                    int iFreqValue = Integer.parseInt(mJsonObject.getString("lightFrequency"));
+
+                    notificationManger = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+                    intent = new Intent();
+                    intent.setClass(getApplicationContext(), HandleNotification.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    PendingIntent pendingIntent =
+                            PendingIntent.getActivity(getApplicationContext(), NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    if((iTempValue < tempLowerBound && countTemp > 300) || isFirstTempNotification){
+                      countTemp = 0;
+                      isFirstTempNotification = false;
+                      notification = new Notification.Builder(getApplicationContext())
+                              .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                              .setContentTitle("Warning!")
+                              .setContentText("您的 AquariumHub 溫度太低!")
+                              .setContentIntent(pendingIntent)
+                              .setDefaults(Notification.DEFAULT_ALL)
+                              .build(); // available from API level 11 and onwards
+                      notification.flags = Notification.FLAG_AUTO_CANCEL;
+                      notificationManger.notify(0, notification);
+                    }
+
+                    if((iTempValue > tempUpperBound && countTemp > 300) || isFirstTempNotification){
+                      countTemp = 0;
+                      isFirstTempNotification = false;
+                      notification = new Notification.Builder(getApplicationContext())
+                              .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                              .setContentTitle("Warning!")
+                              .setContentText("您的 AquariumHub 溫度太高!")
+                              .setContentIntent(pendingIntent)
+                              .setDefaults(Notification.DEFAULT_ALL)
+                              .build(); // available from API level 11 and onwards
+                      notification.flags = Notification.FLAG_AUTO_CANCEL;
+                      notificationManger.notify(0, notification);
+                    }
+
+                    if((iBrightValue < brightLowerBound && countBright > 300) || isFirstBrightNotification){
+                      countBright = 0;
+                      isFirstBrightNotification = false;
+                      notification = new Notification.Builder(getApplicationContext())
+                              .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                              .setContentTitle("Warning!")
+                              .setContentText("您的 AquariumHub 亮度太低!")
+                              .setContentIntent(pendingIntent)
+                              .setDefaults(Notification.DEFAULT_ALL)
+                              .build(); // available from API level 11 and onwards
+                      notification.flags = Notification.FLAG_AUTO_CANCEL;
+                      notificationManger.notify(0, notification);
+                    }
+
+                    if((iBrightValue > brightUpperBound && countBright > 300) || isFirstBrightNotification){
+                      countBright = 0;
+                      isFirstBrightNotification = false;
+                      notification = new Notification.Builder(getApplicationContext())
+                              .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                              .setContentTitle("Warning!")
+                              .setContentText("您的 AquariumHub 亮度太高!")
+                              .setContentIntent(pendingIntent)
+                              .setDefaults(Notification.DEFAULT_ALL)
+                              .build(); // available from API level 11 and onwards
+                      notification.flags = Notification.FLAG_AUTO_CANCEL;
+                      notificationManger.notify(0, notification);
+                    }
+
+                    if((iFreqValue < freqLowerBound && countFreq > 300) || isFirstFreqNotification){
+                      countFreq = 0;
+                      isFirstFreqNotification = false;
+                      notification = new Notification.Builder(getApplicationContext())
+                              .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                              .setContentTitle("Warning!")
+                              .setContentText("您的 AquariumHub 光頻太低!")
+                              .setContentIntent(pendingIntent)
+                              .setDefaults(Notification.DEFAULT_ALL)
+                              .build(); // available from API level 11 and onwards
+                      notification.flags = Notification.FLAG_AUTO_CANCEL;
+                      notificationManger.notify(0, notification);
+                    }
+
+                    if((iFreqValue > freqUpperBound && countFreq > 300) || isFirstFreqNotification){
+                      countFreq = 0;
+                      isFirstFreqNotification = false;
+                      notification = new Notification.Builder(getApplicationContext())
+                              .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                              .setContentTitle("Warning!")
+                              .setContentText("您的 AquariumHub 光頻太高!")
+                              .setContentIntent(pendingIntent)
+                              .setDefaults(Notification.DEFAULT_ALL)
+                              .build(); // available from API level 11 and onwards
+                      notification.flags = Notification.FLAG_AUTO_CANCEL;
+                      notificationManger.notify(0, notification);
+                    }
+                  } catch (UnsupportedEncodingException e) {
+                    Log.e(LOG_TAG, "Message encoding error.", e);
+                  } catch (JSONException e) {
+                    e.printStackTrace();
+                  }
+                }
+              });
+    } catch (Exception e) {
+      Log.e(LOG_TAG, "AwsService", e);
     }
   }
 }

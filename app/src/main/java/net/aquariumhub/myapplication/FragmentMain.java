@@ -53,7 +53,7 @@ public class FragmentMain extends Fragment implements View.OnClickListener {
     };
 
     mViewPager.setAdapter(mAdapter);
-    // mViewPager.setOffscreenPageLimit(2);
+    mViewPager.setOffscreenPageLimit(3);
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
       @Override

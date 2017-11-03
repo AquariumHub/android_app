@@ -13,13 +13,14 @@
         android:layout_marginLeft="8dp">
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/checkBox_bright_upperBound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="No upper bound" />
 
         <CheckBox
+            android:id="@+id/checkBox_bright_lowerBound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,6 +40,7 @@
             android:text="上限: " />
 
         <EditText
+            android:id="@+id/editText_bright_upperBound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="UpperBound"
@@ -58,6 +60,7 @@
             android:text="下限: " />
 
         <EditText
+            android:id="@+id/editText_bright_lowerBound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="LowerBound"
