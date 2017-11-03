@@ -103,7 +103,7 @@ public class FragmentTabStatus extends Fragment {
     }
   }
 
-  public void subscribeToTopic(){
+  public void subscribeToTopic() {
     Intent myIntent = new Intent(getActivity(), AwsService.class);
     getActivity().bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
 
@@ -112,41 +112,42 @@ public class FragmentTabStatus extends Fragment {
       wvGaugeTemperature.loadUrl(URL_GRAPH);
 
       final String topic = "sensingData";
-      myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
-              new AWSIotMqttNewMessageCallback() {
+      if (myService.mqttManager != null)
+        myService.mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
+                new AWSIotMqttNewMessageCallback() {
 
-                @Override
-                public void onMessageArrived(final String topic, final byte[] data) {
+                  @Override
+                  public void onMessageArrived(final String topic, final byte[] data) {
 
-                  getActivity().runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
+                      @Override
+                      public void run() {
 
-                      try {
-                        String message = new String(data, "UTF-8");
-                        JSONObject mJsonObject = new JSONObject(message);
+                        try {
+                          String message = new String(data, "UTF-8");
+                          JSONObject mJsonObject = new JSONObject(message);
 
-                        Log.d(LOG_TAG, "Message arrived:");
-                        Log.d(LOG_TAG, "Topic: " + topic);
-                        Log.d(LOG_TAG, "Temperature: " + mJsonObject.getString("temperature") +
-                                "\nBrightness: " + mJsonObject.getString("brightness") +
-                                "\nLightFrequency: " + mJsonObject.getString("lightFrequency") +
-                                "\n---------------------------------");
+                          Log.d(LOG_TAG, "Message arrived:");
+                          Log.d(LOG_TAG, "Topic: " + topic);
+                          Log.d(LOG_TAG, "Temperature: " + mJsonObject.getString("temperature") +
+                                  "\nBrightness: " + mJsonObject.getString("brightness") +
+                                  "\nLightFrequency: " + mJsonObject.getString("lightFrequency") +
+                                  "\n---------------------------------");
 
-                        tvValueTemperature.setText(getString(R.string.value_temperature, mJsonObject.getString("temperature")));
-                        tvValueBrightness.setText(getString(R.string.value_brightness, mJsonObject.getString("brightness")));
-                        tvValueLightFrequency.setText(getString(R.string.value_lightFrequency, mJsonObject.getString("lightFrequency")));
+                          tvValueTemperature.setText(getString(R.string.value_temperature, mJsonObject.getString("temperature")));
+                          tvValueBrightness.setText(getString(R.string.value_brightness, mJsonObject.getString("brightness")));
+                          tvValueLightFrequency.setText(getString(R.string.value_lightFrequency, mJsonObject.getString("lightFrequency")));
 
-                      } catch (UnsupportedEncodingException e) {
-                        Log.e(LOG_TAG, "Message encoding error.", e);
-                      } catch (JSONException e) {
-                        e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                          Log.e(LOG_TAG, "Message encoding error.", e);
+                        } catch (JSONException e) {
+                          e.printStackTrace();
+                        }
                       }
-                    }
-                  });
-                }
-              });
+                    });
+                  }
+                });
     } catch (Exception e) {
       Log.e(LOG_TAG, "Subscription error.", e);
     }
