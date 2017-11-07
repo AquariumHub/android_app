@@ -1,7 +1,6 @@
 package net.aquariumhub.myapplication;
 
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,19 +29,12 @@ import java.net.URI;
 
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
-import com.facebook.share.Sharer;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareButton;
-import com.facebook.share.widget.ShareDialog;
 
 import static android.content.Context.BIND_AUTO_CREATE;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FragmentTabHub extends Fragment {
 
@@ -63,7 +54,6 @@ public class FragmentTabHub extends Fragment {
   private LoginManager loginManager;
   private CallbackManager callbackManager;
   private ProfileTracker profileTracker;
-  ShareDialog shareDialog;
 
   // final String URL_VIDEO = "http://mylinkit.local:8080/?action=stream";
   // final String URL_VIDEO = "http://13.115.112.36:4443/?action=stream";
@@ -80,7 +70,6 @@ public class FragmentTabHub extends Fragment {
   Switch aSwitchLiveStream;
   ImageView imageViewLiveStream;
 
-  ShareButton shareButton;
   Bitmap image;
   int counter = 0;
 
@@ -111,36 +100,12 @@ public class FragmentTabHub extends Fragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
 
-    callbackManager = CallbackManager.Factory.create();
-    shareDialog = new ShareDialog(this);
-    // this part is optional
-    shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-      @Override
-      public void onSuccess(Sharer.Result result) {
-
-      }
-
-      @Override
-      public void onCancel() {
-
-      }
-
-      @Override
-      public void onError(FacebookException error) {
-
-      }
-    });
-
     SharePhoto photo = new SharePhoto.Builder()
             .setBitmap(image)
             .build();
     content = new SharePhotoContent.Builder()
             .addPhoto(photo)
             .build();
-
-    //shareButton = (ShareButton)getActivity().findViewById(R.id.fb_share_button);
-    shareButton.setShareContent(content);
-    shareButton.setOnClickListener(shareButtonClicked);
 
     seekbarAP700Intensity = (SeekBar) getActivity().findViewById(R.id.bar_ap700_intensity);
     seekbarAP700Intensity.setOnSeekBarChangeListener(seekbarAP700IntensityChange);
@@ -166,14 +131,6 @@ public class FragmentTabHub extends Fragment {
     aSwitchLiveStream.setChecked(false);
     new DoRead().execute(URL_VIDEO);
   }
-
-  ShareButton.OnClickListener shareButtonClicked = new ShareButton.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-      image = getScreenShot();
-      shareDialog.show(content);
-    }
-  };
 
   @Override
   public void onStart() {
