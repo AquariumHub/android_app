@@ -1,5 +1,6 @@
 package net.aquariumhub.myapplication;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -298,11 +299,16 @@ public class AwsService extends Service {
   int countBright = 0;
   int countFreq = 0;
 
+  public final String CHANNEL_ID_TEMPERATURE = "channelId_temperature";
+  public final String CHANNEL_ID_BRIGHTNESS = "channelId_brightness";
+  public final String CHANNEL_ID_LIGHTFREQUENCY = "channelId_lightFrequency";
+
   public void subscribeToTopic() {
     try {
       final String topic = "sensingData";
       mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
               new AWSIotMqttNewMessageCallback() {
+                @TargetApi(Build.VERSION_CODES.O)
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                 @Override
                 public void onMessageArrived(final String topic, final byte[] data) {
@@ -324,7 +330,7 @@ public class AwsService extends Service {
                     int iBrightValue = Integer.parseInt(mJsonObject.getString("brightness"));
                     int iFreqValue = Integer.parseInt(mJsonObject.getString("lightFrequency"));
 
-                    notificationManger = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                    notificationManger = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
                     intent = new Intent();
                     intent.setClass(getApplicationContext(), HandleNotification.class);
@@ -333,10 +339,10 @@ public class AwsService extends Service {
                     PendingIntent pendingIntent =
                             PendingIntent.getActivity(getApplicationContext(), NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    if((iTempValue < tempLowerBound && countTemp > 300) || isFirstTempNotification){
+                    if ((iTempValue < tempLowerBound && countTemp > 300) || isFirstTempNotification) {
                       countTemp = 0;
                       isFirstTempNotification = false;
-                      notification = new Notification.Builder(getApplicationContext())
+                      notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_TEMPERATURE)
                               .setSmallIcon(android.R.drawable.sym_def_app_icon)
                               .setContentTitle("Warning!")
                               .setContentText("您的 AquariumHub 溫度太低!")
@@ -347,10 +353,10 @@ public class AwsService extends Service {
                       notificationManger.notify(0, notification);
                     }
 
-                    if((iTempValue > tempUpperBound && countTemp > 300) || isFirstTempNotification){
+                    if ((iTempValue > tempUpperBound && countTemp > 300) || isFirstTempNotification) {
                       countTemp = 0;
                       isFirstTempNotification = false;
-                      notification = new Notification.Builder(getApplicationContext())
+                      notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_TEMPERATURE)
                               .setSmallIcon(android.R.drawable.sym_def_app_icon)
                               .setContentTitle("Warning!")
                               .setContentText("您的 AquariumHub 溫度太高!")
@@ -361,10 +367,10 @@ public class AwsService extends Service {
                       notificationManger.notify(0, notification);
                     }
 
-                    if((iBrightValue < brightLowerBound && countBright > 300) || isFirstBrightNotification){
+                    if ((iBrightValue < brightLowerBound && countBright > 300) || isFirstBrightNotification) {
                       countBright = 0;
                       isFirstBrightNotification = false;
-                      notification = new Notification.Builder(getApplicationContext())
+                      notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_BRIGHTNESS)
                               .setSmallIcon(android.R.drawable.sym_def_app_icon)
                               .setContentTitle("Warning!")
                               .setContentText("您的 AquariumHub 亮度太低!")
@@ -375,10 +381,10 @@ public class AwsService extends Service {
                       notificationManger.notify(0, notification);
                     }
 
-                    if((iBrightValue > brightUpperBound && countBright > 300) || isFirstBrightNotification){
+                    if ((iBrightValue > brightUpperBound && countBright > 300) || isFirstBrightNotification) {
                       countBright = 0;
                       isFirstBrightNotification = false;
-                      notification = new Notification.Builder(getApplicationContext())
+                      notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_BRIGHTNESS)
                               .setSmallIcon(android.R.drawable.sym_def_app_icon)
                               .setContentTitle("Warning!")
                               .setContentText("您的 AquariumHub 亮度太高!")
@@ -389,10 +395,10 @@ public class AwsService extends Service {
                       notificationManger.notify(0, notification);
                     }
 
-                    if((iFreqValue < freqLowerBound && countFreq > 300) || isFirstFreqNotification){
+                    if ((iFreqValue < freqLowerBound && countFreq > 300) || isFirstFreqNotification) {
                       countFreq = 0;
                       isFirstFreqNotification = false;
-                      notification = new Notification.Builder(getApplicationContext())
+                      notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_LIGHTFREQUENCY)
                               .setSmallIcon(android.R.drawable.sym_def_app_icon)
                               .setContentTitle("Warning!")
                               .setContentText("您的 AquariumHub 光頻太低!")
@@ -403,10 +409,10 @@ public class AwsService extends Service {
                       notificationManger.notify(0, notification);
                     }
 
-                    if((iFreqValue > freqUpperBound && countFreq > 300) || isFirstFreqNotification){
+                    if ((iFreqValue > freqUpperBound && countFreq > 300) || isFirstFreqNotification) {
                       countFreq = 0;
                       isFirstFreqNotification = false;
-                      notification = new Notification.Builder(getApplicationContext())
+                      notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_LIGHTFREQUENCY)
                               .setSmallIcon(android.R.drawable.sym_def_app_icon)
                               .setContentTitle("Warning!")
                               .setContentText("您的 AquariumHub 光頻太高!")

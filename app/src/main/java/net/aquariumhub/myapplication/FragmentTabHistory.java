@@ -11,23 +11,30 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
+import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
 import com.facebook.share.widget.ShareDialog;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FragmentTabHistory extends Fragment {
 
@@ -64,12 +71,12 @@ public class FragmentTabHistory extends Fragment {
     btnNotification.setOnClickListener(btnNotificationClick);
 
     callbackManager = CallbackManager.Factory.create();
-    shareDialog = new ShareDialog(this);
+    shareDialog = new ShareDialog(getActivity());
     // this part is optional
     shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
       @Override
       public void onSuccess(Sharer.Result result) {
-
+        Toast.makeText(getActivity(),"Upload successful", Toast.LENGTH_LONG).show();
       }
 
       @Override
@@ -79,16 +86,10 @@ public class FragmentTabHistory extends Fragment {
 
       @Override
       public void onError(FacebookException error) {
-
+        Log.e(TAG, "FacebookException", error);
       }
     });
 
-    SharePhoto photo = new SharePhoto.Builder()
-            .setBitmap(image)
-            .build();
-    SharePhotoContent content = new SharePhotoContent.Builder()
-            .addPhoto(photo)
-            .build();
   }
 
   public Button.OnClickListener btnNotificationClick = new Button.OnClickListener() {
@@ -97,6 +98,11 @@ public class FragmentTabHistory extends Fragment {
       //將截圖Bitmap放入ImageView
       image = getScreenShot();
       imageView.setImageBitmap(image);
+
+      SharePhoto sharePhoto = new SharePhoto.Builder().setBitmap(image).build();
+      ArrayList<SharePhoto> photos = new ArrayList<>();
+      photos.add(sharePhoto);
+
     }
   };
 

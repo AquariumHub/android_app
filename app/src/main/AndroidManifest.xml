@@ -15,13 +15,13 @@
         android:theme="@style/AppTheme">
         <service android:name=".AwsService" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider{1188126607998146}"
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1188126607998146"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
 
         <activity
             android:name=".Splash"
